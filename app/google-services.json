@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1081127062316",
+    "project_id": "appsinovatifguru",
+    "storage_bucket": "appsinovatifguru.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081127062316:android:b163b58281e0cf5f3d7a89",
+        "android_client_info": {
+          "package_name": "com.uc.appsinovatifguru"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081127062316-5hgb16h453bl91jand53orvtfue51gd7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uc.appsinovatifguru",
+            "certificate_hash": "9deca1f6fb6fc6b97d0e935c6aaacf19d66e0a64"
+          }
+        },
+        {
+          "client_id": "1081127062316-9uqnkpr2mcm86ti19f2bj5uhumh0n4gt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcqQUh966iKxZDfypzxLKDmZVQOjzKQZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081127062316-9uqnkpr2mcm86ti19f2bj5uhumh0n4gt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
