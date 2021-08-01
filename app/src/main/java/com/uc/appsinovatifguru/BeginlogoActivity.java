@@ -19,7 +19,7 @@ public class BeginlogoActivity extends AppCompatActivity {
                 checkOnboarding();
                 finish();
             }
-        }, 3 * 1000);
+        }, 2 * 1000);
     }
 
 

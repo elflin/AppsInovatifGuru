@@ -26,20 +26,20 @@ public class OnboardingActivity extends AppCompatActivity {
     private OnboardingAdapter onboardingAdapter;
     private LinearLayout layoutOnboardingIndicator;
     private Button buttonOnboardingAction;
+    private ViewPager2 onboardingViewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
-        layoutOnboardingIndicator = findViewById(R.id.layoutOnboardingIndicators);
-        buttonOnboardingAction = findViewById(R.id.buttonOnBoardingAction);
+        initView();
         setOnboardingItem();
-
-        ViewPager2 onboardingViewPager = findViewById(R.id.onboardingViewPager);
-        onboardingViewPager.setAdapter(onboardingAdapter);
-
         setOnboadingIndicator();
         setCurrentOnboardingIndicators(0);
+        setListener();
+    }
 
+    private void setListener() {
         onboardingViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -63,6 +63,13 @@ public class OnboardingActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void initView() {
+        layoutOnboardingIndicator = findViewById(R.id.layoutOnboardingIndicators);
+        buttonOnboardingAction = findViewById(R.id.buttonOnBoardingAction);
+        onboardingViewPager = findViewById(R.id.onboardingViewPager);
+    }
+
     private void setOnboadingIndicator() {
         ImageView[] indicators = new ImageView[onboardingAdapter.getItemCount()];
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -124,5 +131,6 @@ public class OnboardingActivity extends AppCompatActivity {
         onBoardingItems.add(itemEatTogether);
         onBoardingItems.add(itemDayAndNight);
         onboardingAdapter = new OnboardingAdapter(onBoardingItems);
+        onboardingViewPager.setAdapter(onboardingAdapter);
     }
 }

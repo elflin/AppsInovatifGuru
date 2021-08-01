@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_home"
+        android:icon="@drawable/botnavitem_home"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/menu_result"
+        android:icon="@drawable/botnavitem_result"
+        android:title="@string/result" />
+    <item
+        android:id="@+id/menu_profile"
+        android:icon="@drawable/botnavitem_profile"
+        android:title="@string/profile" />
+</menu>
