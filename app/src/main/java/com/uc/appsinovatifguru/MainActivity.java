@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = new ResultFragment();
                 else if (item.getItemId() == R.id.menu_profile) {
                     selectedFragment = new ProfileFragment();
-                    if(currUser == null) {
-                        startActivity(new Intent(getBaseContext(), LoginActivity.class));
-                    }
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_framelayout, selectedFragment).commit();
                 return true;

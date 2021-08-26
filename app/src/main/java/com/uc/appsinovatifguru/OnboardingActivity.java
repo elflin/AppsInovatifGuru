@@ -57,7 +57,7 @@ public class OnboardingActivity extends AppCompatActivity {
                     SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
                     sharedPreferencesEditor.putBoolean(GlobalValue.Onboarding_Complete, true);
                     sharedPreferencesEditor.apply();
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                     finish();
                 }
             }

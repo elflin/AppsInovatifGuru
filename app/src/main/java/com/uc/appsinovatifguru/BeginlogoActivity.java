@@ -8,7 +8,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class BeginlogoActivity extends AppCompatActivity {
+
+    private FirebaseUser currentUser;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,12 +22,17 @@ public class BeginlogoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_beginlogo);
         new Handler().postDelayed(new Runnable() {
             public void run() {
+                init();
                 checkOnboarding();
                 finish();
             }
         }, 2 * 1000);
     }
 
+    private void init(){
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+    }
 
     private void checkOnboarding(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -30,7 +41,11 @@ public class BeginlogoActivity extends AppCompatActivity {
             // The user hasn't seen the OnboardingSupportFragment yet, so show it
             startActivity(new Intent(this, OnboardingActivity.class));
         }else{
-            startActivity(new Intent(this, MainActivity.class));
+            if(currentUser == null) {
+                startActivity(new Intent(this, LoginActivity.class));
+            }else{
+                startActivity(new Intent(this, MainActivity.class));
+            }
         }
     }
 }

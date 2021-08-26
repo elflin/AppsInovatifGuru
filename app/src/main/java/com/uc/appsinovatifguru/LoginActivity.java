@@ -47,10 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (result.getResultCode() == Activity.RESULT_OK) {
                             Intent intent = result.getData();
                             if (intent.getBooleanExtra("isRegistered", false) == true) {
-                                intent = new Intent(getBaseContext(), MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                                finish();
+                                gotoMainClass();
                             }
                         }
                     }
@@ -76,12 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d("1", "signInWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    Toast.makeText(LoginActivity.this, "Authentication Success.",Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                    finish();
+                                    gotoMainClass();
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w("1", "signInWithEmail:failure", task.getException());
@@ -98,6 +90,14 @@ public class LoginActivity extends AppCompatActivity {
                 mStartForResult.launch(new Intent(getBaseContext(), RegisterActivity.class));
             }
         });
+    }
+
+    private void gotoMainClass(){
+        Toast.makeText(LoginActivity.this, "Authentication Success.",Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void initComponent() {
