@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="jenis_kelamin">
+        <item>Laki-laki</item>
+        <item>Perempuan</item>
+    </string-array>
+
+    <string-array name="status_pernikahan">
+        <item>Belum Menikah</item>
+        <item>Menikah</item>
+        <item>Cerai Hidup</item>
+        <item>Cerai Mati</item>
+    </string-array>
+
+    <string-array name="asal_sekolah">
+        <item>Sekolah Kristen Kalam Kudus Solo</item>
+        <item>Sekolah Bopkri Yogyakarta</item>
+        <item>Sekolah Citra Berkat Surabaya</item>
+        <item>Sekolah Kristen Tri Tunggal Semarang</item>
+        <item>Sekolah Kristen Kalam Kudus Malanh</item>
+        <item>Sekolah Lab Kristen Satya Wacana Salatiga</item>
+    </string-array>
+
+    <string-array name="jenjang_mengajar">
+        <item>PG/TK</item>
+        <item>SD</item>
+        <item>SMP</item>
+        <item>SMA</item>
+    </string-array>
+
+    <string-array name="pendidikan">
+        <item>SLTA</item>
+        <item>Diploma</item>
+        <item>S1</item>
+        <item>S2</item>
+        <item>S3</item>
+    </string-array>
+
+    <string-array name="isIlmuPendidikan">
+        <item>Ilmu Kependidikan (FKIP/PGSD/PGTK)</item>
+        <item>Non Kependidikan</item>
+    </string-array>
+</resources>

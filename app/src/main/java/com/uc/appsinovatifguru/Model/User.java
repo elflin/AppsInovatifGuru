@@ -1,6 +1,9 @@
 package com.uc.appsinovatifguru.Model;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class User implements Parcelable {
 
     private String id, name, email, password,
     jenis_kelamin, status_pernikahan, asal_sekolah, jenjang_mengajar,
@@ -19,6 +22,35 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    protected User(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        email = in.readString();
+        password = in.readString();
+        jenis_kelamin = in.readString();
+        status_pernikahan = in.readString();
+        asal_sekolah = in.readString();
+        jenjang_mengajar = in.readString();
+        mata_pelajaran = in.readString();
+        pendidikan = in.readString();
+        usia = in.readInt();
+        jumlah_anak = in.readInt();
+        lama_mengajar = in.readInt();
+        isIlmuPendidikan = in.readByte() != 0;
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -130,5 +162,28 @@ public class User {
 
     public void setIlmuPendidikan(boolean ilmuPendidikan) {
         isIlmuPendidikan = ilmuPendidikan;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(email);
+        dest.writeString(password);
+        dest.writeString(jenis_kelamin);
+        dest.writeString(status_pernikahan);
+        dest.writeString(asal_sekolah);
+        dest.writeString(jenjang_mengajar);
+        dest.writeString(mata_pelajaran);
+        dest.writeString(pendidikan);
+        dest.writeInt(usia);
+        dest.writeInt(jumlah_anak);
+        dest.writeInt(lama_mengajar);
+        dest.writeByte((byte) (isIlmuPendidikan ? 1 : 0));
     }
 }

@@ -36,6 +36,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:enabled="false"
                 android:fontFamily="@font/proxima_nova_bold"
                 android:text="Simpan"
                 android:textAllCaps="false"
@@ -64,7 +65,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:errorEnabled="true"
+                android:clickable="false"
+                app:errorEnabled="false"
                 app:layout_constraintEnd_toEndOf="@+id/textView"
                 app:layout_constraintStart_toStartOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/textView">
@@ -72,6 +74,10 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:hint="Email" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,12 +90,14 @@
                 app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="@+id/detailakun_oldpass"
                 app:layout_constraintStart_toStartOf="@+id/detailakun_oldpass"
-                app:layout_constraintTop_toBottomOf="@+id/detailakun_oldpass">
+                app:layout_constraintTop_toBottomOf="@+id/detailakun_oldpass"
+                app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Kata Sandi Baru" />
+                    android:hint="Kata Sandi Baru"
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageButton
@@ -129,12 +137,14 @@
                 app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="@+id/detailakun_newpass"
                 app:layout_constraintStart_toStartOf="@+id/detailakun_newpass"
-                app:layout_constraintTop_toBottomOf="@+id/detailakun_newpass">
+                app:layout_constraintTop_toBottomOf="@+id/detailakun_newpass"
+                app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Konfirmasi Kata Sandi" />
+                    android:hint="Konfirmasi Kata Sandi"
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -146,12 +156,14 @@
                 app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="@+id/textView7"
                 app:layout_constraintStart_toStartOf="@+id/textView7"
-                app:layout_constraintTop_toBottomOf="@+id/textView7">
+                app:layout_constraintTop_toBottomOf="@+id/textView7"
+                app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Kata Sandi" />
+                    android:hint="Kata Sandi Lama"
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

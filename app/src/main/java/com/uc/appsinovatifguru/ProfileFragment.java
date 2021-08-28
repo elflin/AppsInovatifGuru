@@ -1,14 +1,20 @@
 package com.uc.appsinovatifguru;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,8 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class ProfileFragment extends Fragment {
 
     private View view;
-    private Button profile_signout;
-    private FirebaseUser currentUser;
+    private Button profile_signout, profile_akunsaya, profile_datasaya;
     private FirebaseAuth mAuth;
 
     @Override
@@ -29,6 +34,37 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setListener() {
+
+        ActivityResultLauncher<Intent> laucherActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            MainActivity mainActivity = (MainActivity) getActivity();
+                            mainActivity.refreshData();
+                        }
+                    }
+                });
+
+        profile_akunsaya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                intent.putExtra("title", "Akun Saya");
+                laucherActivityResultLauncher.launch(intent);
+            }
+        });
+
+        profile_datasaya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                intent.putExtra("title", "Data Saya");
+                laucherActivityResultLauncher.launch(intent);
+            }
+        });
+
         profile_signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,12 +78,8 @@ public class ProfileFragment extends Fragment {
 
     private void initComponent() {
         profile_signout = view.findViewById(R.id.profile_signout);
+        profile_akunsaya = view.findViewById(R.id.profile_akunsaya);
+        profile_datasaya = view.findViewById(R.id.profile_datasaya);
         mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            profile_signout.setVisibility(View.VISIBLE);
-        }else {
-            profile_signout.setVisibility(View.GONE);
-        }
     }
 }

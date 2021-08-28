@@ -1,14 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DatasayaFragment">
+    tools:context=".DatasayaFragment" >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/datasaya_username"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Username" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/datasaya_usia"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/datasaya_username"
+                app:layout_constraintStart_toStartOf="@+id/datasaya_username"
+                app:layout_constraintTop_toBottomOf="@+id/datasaya_username">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Usia"
+                    android:inputType="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/datasaya_jeniskelamin"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Jenis kelamin"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/datasaya_usia"
+                app:layout_constraintStart_toStartOf="@+id/datasaya_usia"
+                app:layout_constraintTop_toBottomOf="@+id/datasaya_usia">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/datasaya_statuspernikahan"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Status Pernikahan"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/datasaya_jeniskelamin"
+                app:layout_constraintStart_toStartOf="@+id/datasaya_jeniskelamin"
+                app:layout_constraintTop_toBottomOf="@+id/datasaya_jeniskelamin">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/datasaya_jumlahanak"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/datasaya_statuspernikahan"
+                app:layout_constraintStart_toStartOf="@+id/datasaya_statuspernikahan"
+                app:layout_constraintTop_toBottomOf="@+id/datasaya_statuspernikahan">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Jumlah Anak"
+                    android:inputType="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/datasaya_asalsekolah"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Asal Sekolah"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/datasaya_jumlahanak"
+                app:layout_constraintStart_toStartOf="@+id/datasaya_jumlahanak"
+                app:layout_constraintTop_toBottomOf="@+id/datasaya_jumlahanak">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/datasaya_lamamengajar"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/datasaya_asalsekolah"
+                app:layout_constraintStart_toStartOf="@+id/datasaya_asalsekolah"
+                app:layout_constraintTop_toBottomOf="@+id/datasaya_asalsekolah">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Lama Mengajar"
+                    android:inputType="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/datasaya_jenjangmengajar"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Jenjang mengajar (pilih 1 yg paling utama)"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/datasaya_lamamengajar"
+                app:layout_constraintStart_toStartOf="@+id/datasaya_lamamengajar"
+                app:layout_constraintTop_toBottomOf="@+id/datasaya_lamamengajar">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/datasaya_mata_pelajaran"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/datasaya_jenjangmengajar"
+                app:layout_constraintStart_toStartOf="@+id/datasaya_jenjangmengajar"
+                app:layout_constraintTop_toBottomOf="@+id/datasaya_jenjangmengajar">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Mengajar MaPel (boleh mengisi lebih dari 1)"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/datasaya_pendidikan"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Pendidikan Tertinggi"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/datasaya_mata_pelajaran"
+                app:layout_constraintStart_toStartOf="@+id/datasaya_mata_pelajaran"
+                app:layout_constraintTop_toBottomOf="@+id/datasaya_mata_pelajaran">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/datasaya_isIlmuPendidikan"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Latar Belakang Pendidikan di Perguruan Tinggi"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/datasaya_pendidikan"
+                app:layout_constraintStart_toStartOf="@+id/datasaya_pendidikan"
+                app:layout_constraintTop_toBottomOf="@+id/datasaya_pendidikan">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/datasaya_simpan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/proxima_nova_bold"
+                android:text="Simpan"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/datasaya_isIlmuPendidikan"
+                app:layout_constraintStart_toStartOf="@+id/datasaya_isIlmuPendidikan"
+                app:layout_constraintTop_toBottomOf="@+id/datasaya_isIlmuPendidikan" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

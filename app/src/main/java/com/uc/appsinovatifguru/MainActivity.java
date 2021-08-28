@@ -32,7 +32,6 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView main_botnavview;
-    private FrameLayout main_framelayout;
     private FirebaseAuth mAuth;
     private FirebaseUser currUser;
     private User dataCurrUser;
@@ -44,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initView();
         setBottomNavBar();
+        postData();
+    }
+
+    public void refreshData(){
         postData();
     }
 

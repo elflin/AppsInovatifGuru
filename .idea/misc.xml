@@ -14,6 +14,7 @@
         <entry key="app/src/main/res/drawable/purple_circle.xml" value="0.19907407407407407" />
         <entry key="app/src/main/res/drawable/rounded_corner_yellow.xml" value="0.3707692307692308" />
         <entry key="app/src/main/res/drawable/rounded_top_white.xml" value="0.3707692307692308" />
+        <entry key="app/src/main/res/drawable/spinner_border.xml" value="0.25555555555555554" />
         <entry key="app/src/main/res/drawable/white_circle.xml" value="0.3648148148148148" />
         <entry key="app/src/main/res/layout/activity_beginlogo.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.3463541666666667" />
@@ -21,6 +22,9 @@
         <entry key="app/src/main/res/layout/activity_onboarding.xml" value="0.3463541666666667" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.3463541666666667" />
+        <entry key="app/src/main/res/layout/drop_down_layout.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/dropdown_item.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/fragment_datasaya.xml" value="0.3461730865432716" />
         <entry key="app/src/main/res/layout/fragment_detailakun.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.36041666666666666" />
