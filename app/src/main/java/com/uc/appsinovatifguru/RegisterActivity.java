@@ -60,9 +60,9 @@ public class RegisterActivity extends AppCompatActivity {
         register_registerbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = register_username.getEditText().getText().toString().toLowerCase().trim();
+                String name = register_username.getEditText().getText().toString().trim();
                 String email = register_email.getEditText().getText().toString().toLowerCase().trim();
-                String rawPass = register_password.getEditText().getText().toString().toLowerCase().trim();
+                String rawPass = register_password.getEditText().getText().toString().trim();
                 String password = "";
                 try {
                     password = AESCrypt.encrypt(rawPass);

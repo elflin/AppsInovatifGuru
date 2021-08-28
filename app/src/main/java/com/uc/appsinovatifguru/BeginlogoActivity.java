@@ -26,7 +26,7 @@ public class BeginlogoActivity extends AppCompatActivity {
                 checkOnboarding();
                 finish();
             }
-        }, 2 * 1000);
+        }, 1 * 1000);
     }
 
     private void init(){
