@@ -38,9 +38,10 @@ public class HomeFragment extends Fragment implements OnCardListener {
 
     private void setupRecyclerView() {
         Menu menu = new Menu("Survey", R.drawable.survey);
+        menu.setNextClass(SurveymenuActivity.class);
         listMenu.add(menu);
-        menu = new Menu("Training", R.drawable.training);
-        listMenu.add(menu);
+//        menu = new Menu("Training", R.drawable.training);
+//        listMenu.add(menu);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 2);
         main_recyclerview.setLayoutManager(manager);
         main_recyclerview.setAdapter(mainAdapter);
@@ -55,7 +56,6 @@ public class HomeFragment extends Fragment implements OnCardListener {
 
     @Override
     public void onCardClick(int position) {
-//        startActivity(new Intent(getActivity(), listMenu.get(position).getNextClass()));
-        
+        startActivity(new Intent(getActivity(), listMenu.get(position).getNextClass()));
     }
 }

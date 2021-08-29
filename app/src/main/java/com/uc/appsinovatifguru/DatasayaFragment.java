@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -49,10 +50,118 @@ public class DatasayaFragment extends Fragment {
     }
 
     private void setListener() {
+        datasaya_simpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dataCurrUser.setName(datasaya_username.getEditText().getText().toString().trim());
+                dataCurrUser.setUsia(Integer.parseInt(datasaya_usia.getEditText().getText().toString().trim()));
+                dataCurrUser.setJenis_kelamin(datasaya_jeniskelamin.getEditText().getText().toString().trim());
+                dataCurrUser.setStatus_pernikahan(datasaya_statuspernikahan.getEditText().getText().toString().trim());
+                dataCurrUser.setJumlah_anak(Integer.parseInt(datasaya_jumlahanak.getEditText().getText().toString().trim()));
+                dataCurrUser.setAsal_sekolah(datasaya_asalsekolah.getEditText().getText().toString().trim());
+                dataCurrUser.setLama_mengajar(Integer.parseInt(datasaya_lamamengajar.getEditText().getText().toString().trim()));
+                dataCurrUser.setJenjang_mengajar(datasaya_jenjangmengajar.getEditText().getText().toString().trim());
+                dataCurrUser.setMata_pelajaran(datasaya_mata_pelajaran.getEditText().getText().toString().trim());
+                dataCurrUser.setPendidikan(datasaya_pendidikan.getEditText().getText().toString().trim());
+                if(datasaya_isIlmuPendidikan.getEditText().getText().toString().trim().equalsIgnoreCase("Ilmu Kependidikan (FKIP/PGSD/PGTK)")){
+                    dataCurrUser.setIlmuPendidikan(true);
+                }else if(datasaya_isIlmuPendidikan.getEditText().getText().toString().trim().equalsIgnoreCase("Non Kependidikan")) {
+                    dataCurrUser.setIlmuPendidikan(false);
+                }
+                saveData();
+            }
+        });
+    }
+
+    private void saveData(){
+        String url = GlobalValue.serverURL+"updateUser";
+        RequestQueue myQueue = Volley.newRequestQueue(getContext());
+
+        JSONObject parameter = new JSONObject();
+        try {
+            parameter.put("id", currUser.getUid());
+            parameter.put("name", dataCurrUser.getName());
+            parameter.put("usia", dataCurrUser.getUsia());
+            parameter.put("jenis_kelamin", dataCurrUser.getJenis_kelamin());
+            parameter.put("status_pernikahan", dataCurrUser.getStatus_pernikahan());
+            parameter.put("jumlah_anak", dataCurrUser.getJumlah_anak());
+            parameter.put("asal_sekolah", dataCurrUser.getAsal_sekolah());
+            parameter.put("lama_mengajar", dataCurrUser.getLama_mengajar());
+            parameter.put("jenjang_mengajar", dataCurrUser.getJenjang_mengajar());
+            parameter.put("mata_pelajaran", dataCurrUser.getMata_pelajaran());
+            parameter.put("pendidikan", dataCurrUser.getPendidikan());
+            parameter.put("isIlmuPendidikan", dataCurrUser.isIlmuPendidikan());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getString("status").equalsIgnoreCase("sukses")){
+                                parent.simpanClicked();
+                                Toast.makeText(getContext(), "Sukses menyimpan", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "Gagal menyimpan", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        );
+
+        myQueue.add(request);
     }
 
     private void showData(){
+        if(!dataCurrUser.getName().isEmpty()){
+            datasaya_username.getEditText().setText(dataCurrUser.getName());
+        }
 
+        datasaya_usia.getEditText().setText(String.valueOf(dataCurrUser.getUsia()));
+
+        if(!dataCurrUser.getJenis_kelamin().equalsIgnoreCase("null")){
+            datasaya_jeniskelamin.getEditText().setText(dataCurrUser.getJenis_kelamin());
+        }
+        if(!dataCurrUser.getStatus_pernikahan().equalsIgnoreCase("null")){
+            datasaya_statuspernikahan.getEditText().setText(dataCurrUser.getStatus_pernikahan());
+        }
+        if(!dataCurrUser.getAsal_sekolah().equalsIgnoreCase("null")){
+            datasaya_asalsekolah.getEditText().setText(dataCurrUser.getAsal_sekolah());
+        }
+
+        datasaya_lamamengajar.getEditText().setText(String.valueOf(dataCurrUser.getLama_mengajar()));
+
+        if(!dataCurrUser.getJenjang_mengajar().equalsIgnoreCase("null")){
+            datasaya_jenjangmengajar.getEditText().setText(dataCurrUser.getJenjang_mengajar());
+        }
+
+        if(dataCurrUser.getMata_pelajaran().equalsIgnoreCase("null")){
+            datasaya_mata_pelajaran.getEditText().setText("");
+        }else{
+            datasaya_mata_pelajaran.getEditText().setText(dataCurrUser.getMata_pelajaran());
+        }
+
+        datasaya_jumlahanak.getEditText().setText(String.valueOf(dataCurrUser.getJumlah_anak()));
+
+        if(!dataCurrUser.getPendidikan().equalsIgnoreCase("null")){
+            datasaya_pendidikan.getEditText().setText(dataCurrUser.getPendidikan());
+        }
+        if(dataCurrUser.isIlmuPendidikan()){
+            datasaya_isIlmuPendidikan.getEditText().setText("Ilmu Kependidikan (FKIP/PGSD/PGTK)");
+        }else{
+            datasaya_isIlmuPendidikan.getEditText().setText("Non Kependidikan");
+        }
+
+        initSpinner();
     }
 
     private void initView() {
@@ -72,7 +181,6 @@ public class DatasayaFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         currUser = mAuth.getCurrentUser();
         dataCurrUser = new User();
-        initSpinner();
     }
 
     private void initSpinner(){

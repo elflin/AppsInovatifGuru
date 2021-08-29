@@ -13,6 +13,12 @@
         android:theme="@style/Theme.AppsInovatifGuru"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".DetailsurveyActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SurveymenuActivity"
+            android:exported="true" />
+        <activity
             android:name=".ProfileActivity"
             android:exported="true" />
         <activity

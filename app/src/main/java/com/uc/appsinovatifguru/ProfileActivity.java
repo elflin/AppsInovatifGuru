@@ -6,22 +6,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.uc.appsinovatifguru.Model.User;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -65,7 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void initView() {
         profile_title = findViewById(R.id.profile_title);
-        profile_back = findViewById(R.id.profile_back);
+        profile_back = findViewById(R.id.surveymenu_back);
     }
 
 
