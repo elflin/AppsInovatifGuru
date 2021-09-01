@@ -13,6 +13,9 @@
         android:theme="@style/Theme.AppsInovatifGuru"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".QuizActivity"
+            android:exported="true" />
+        <activity
             android:name=".DetailsurveyActivity"
             android:exported="true" />
         <activity

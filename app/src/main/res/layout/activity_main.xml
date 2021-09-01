@@ -19,7 +19,7 @@
         app:layout_constraintBottom_toTopOf="@+id/main_botnavview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_pp">
+        app:layout_constraintTop_toBottomOf="@+id/cardView">
 
     </FrameLayout>
 
@@ -89,14 +89,22 @@
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/main_nama2" />
 
-    <ImageView
-        android:id="@+id/main_pp"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        android:background="@drawable/circle_pp"
-        app:layout_constraintBottom_toBottomOf="@+id/main_progress"
+        app:cardCornerRadius="250dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_nama"
-        app:srcCompat="@drawable/botnavitem_profile" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/main_pp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="24dp"
+            android:visibility="visible"
+            app:srcCompat="@drawable/botnavitem_profile" />
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

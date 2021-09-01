@@ -14,8 +14,9 @@ public class DetailsurveyActivity extends AppCompatActivity {
     private ImageButton surveymenu_back;
     private Button surveymenu_start;
     private RecyclerView surveymenu_recyclerview;
-    private TextView surveymenu_jurnal;
+    private TextView surveymenu_jurnal, surveymenu_title;
     private Intent intent;
+    private String variabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +31,9 @@ public class DetailsurveyActivity extends AppCompatActivity {
         surveymenu_start = findViewById(R.id.surveymenu_start);
         surveymenu_recyclerview = findViewById(R.id.surveymenu_recyclerview);
         surveymenu_jurnal = findViewById(R.id.surveymenu_jurnal);
+        surveymenu_title = findViewById(R.id.surveymenu_title);
         intent = getIntent();
-        String variabel = intent.getStringExtra("variabel");
+        variabel = intent.getStringExtra("variabel");
         if(variabel.equalsIgnoreCase("Perilaku Inovartif Guru")){
             surveymenu_jurnal.setText("Janssen, O. (2000). Job demands, perceptions of effort-reward fairness and innovative work behavior. Journal of Occupational and Organizational Psychology, 287–302.");
         } else if(variabel.equalsIgnoreCase("Intensi Berinovasi")){
