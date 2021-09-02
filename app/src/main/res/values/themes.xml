@@ -14,8 +14,4 @@
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/proxima_nova_regular</item>
     </style>
-
-    <style name="Widget.App.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
-        <item name="buttonTint">@color/button_tint</item>
-    </style>
 </resources>

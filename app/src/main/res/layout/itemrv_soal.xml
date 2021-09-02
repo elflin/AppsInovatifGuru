@@ -44,7 +44,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:checkedButton="@+id/radio_button_2"
             app:layout_constraintEnd_toEndOf="@+id/itemsoal_soal"
             app:layout_constraintStart_toStartOf="@+id/itemsoal_soal"
             app:layout_constraintTop_toBottomOf="@+id/itemsoal_soal">

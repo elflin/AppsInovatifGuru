@@ -21,12 +21,11 @@ public class SoalRecyclerViewAdapter extends RecyclerView.Adapter<SoalRecyclerVi
 
     private ArrayList<Soal> listSoal;
     private SoalListener soalListener;
-    private boolean isSubmit;
 
-    private SoalRecyclerViewAdapter(ArrayList<Soal> listSoal, SoalListener soalListener, boolean isSubmit){
+
+    public SoalRecyclerViewAdapter(ArrayList<Soal> listSoal, SoalListener soalListener){
         this.listSoal = listSoal;
         this.soalListener = soalListener;
-        this.isSubmit = isSubmit;
     }
 
     @NonNull
@@ -41,7 +40,7 @@ public class SoalRecyclerViewAdapter extends RecyclerView.Adapter<SoalRecyclerVi
     public void onBindViewHolder(@NonNull SoalRecyclerViewHolder holder, int position) {
         holder.itemsoal_number.setText(String.valueOf(position+1)+".");
         holder.itemsoal_soal.setText(listSoal.get(position).getSoal());
-        if (isSubmit){
+        if (position == listSoal.size()-1){
             holder.itemsoal_selesai.setVisibility(View.VISIBLE);
         }else{
             holder.itemsoal_selesai.setVisibility(View.GONE);
@@ -83,6 +82,11 @@ public class SoalRecyclerViewAdapter extends RecyclerView.Adapter<SoalRecyclerVi
     @Override
     public int getItemCount() {
         return listSoal.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     public class SoalRecyclerViewHolder extends RecyclerView.ViewHolder {
