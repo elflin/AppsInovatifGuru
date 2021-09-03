@@ -42,6 +42,7 @@ public class DetailsurveyActivity extends AppCompatActivity {
     private FirebaseUser currUser;
     private ArrayList<Riwayat> listRiwayat;
     private RiwayatAdapter adapter;
+    private Boolean isClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,7 @@ public class DetailsurveyActivity extends AppCompatActivity {
                                 JSONObject dimensi = temp.getJSONObject("dimensi");
 
                                 Riwayat riwayat = new Riwayat();
-                                if(!temp.getString("updated_at").equalsIgnoreCase("null")) {
+                                if(!temp.getString("updated_at").equalsIgnoreCase("null") && variabel1.getInt(variabel) != 0) {
                                     riwayat.setTanggal(temp.getString("updated_at"));
                                     System.out.println();
                                     riwayat.setRiwayat_nilai(value.getString(variabel));
@@ -179,6 +180,12 @@ public class DetailsurveyActivity extends AppCompatActivity {
         surveymenu_recyclerview.setAdapter(adapter);
         currUser = mAuth.getCurrentUser();
         variabel = intent.getStringExtra("variabel");
+        isClicked = intent.getBooleanExtra("isClicked", false);
+        if (isClicked){
+            surveymenu_start.setEnabled(false);
+        }else{
+            surveymenu_start.setEnabled(true);
+        }
         if(variabel.equalsIgnoreCase("Perilaku Inovatif Guru")){
             surveymenu_jurnal.setText("Janssen, O. (2000). Job demands, perceptions of effort-reward fairness and innovative work behavior. Journal of Occupational and Organizational Psychology, 287–302.");
         } else if(variabel.equalsIgnoreCase("Intensi Berinovasi")){

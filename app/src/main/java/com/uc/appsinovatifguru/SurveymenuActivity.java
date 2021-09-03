@@ -99,54 +99,49 @@ public class SurveymenuActivity extends AppCompatActivity {
 
         if(sharedPreferences.getBoolean(GlobalValue.var1, false)){
             surveymenu_menu1.setBackgroundResource(R.drawable.green_button);
-            surveymenu_menu1.setEnabled(false);
         }else{
             surveymenu_menu1.setBackgroundResource(R.drawable.gray_button);
-            surveymenu_menu1.setEnabled(true);
         }
         if(sharedPreferences.getBoolean(GlobalValue.var2, false)){
             surveymenu_menu2.setBackgroundResource(R.drawable.green_button);
-            surveymenu_menu2.setEnabled(false);
         }else{
             surveymenu_menu2.setBackgroundResource(R.drawable.gray_button);
-            surveymenu_menu2.setEnabled(true);
         }
         if(sharedPreferences.getBoolean(GlobalValue.var3, false)){
             surveymenu_menu3.setBackgroundResource(R.drawable.green_button);
-            surveymenu_menu3.setEnabled(false);
         }else{
             surveymenu_menu3.setBackgroundResource(R.drawable.gray_button);
-            surveymenu_menu3.setEnabled(true);
         }
         if(sharedPreferences.getBoolean(GlobalValue.var4, false)){
             surveymenu_menu4.setBackgroundResource(R.drawable.green_button);
-            surveymenu_menu4.setEnabled(false);
         }else{
             surveymenu_menu4.setBackgroundResource(R.drawable.gray_button);
-            surveymenu_menu4.setEnabled(true);
         }
         if(sharedPreferences.getBoolean(GlobalValue.var5, false)){
             surveymenu_menu5.setBackgroundResource(R.drawable.green_button);
-            surveymenu_menu5.setEnabled(false);
         }else{
             surveymenu_menu5.setBackgroundResource(R.drawable.gray_button);
-            surveymenu_menu5.setEnabled(true);
         }
         if(sharedPreferences.getBoolean(GlobalValue.var6, false)){
             surveymenu_menu6.setBackgroundResource(R.drawable.green_button);
-            surveymenu_menu6.setEnabled(false);
         }else{
             surveymenu_menu6.setBackgroundResource(R.drawable.gray_button);
-            surveymenu_menu6.setEnabled(true);
         }
         if(sharedPreferences.getBoolean(GlobalValue.var7, false)){
             surveymenu_menu7.setBackgroundResource(R.drawable.green_button);
-            surveymenu_menu7.setEnabled(false);
         }else{
             surveymenu_menu7.setBackgroundResource(R.drawable.gray_button);
-            surveymenu_menu7.setEnabled(true);
         }
 
+    }
+
+    private boolean checker(String var){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(sharedPreferences.getBoolean(var, false)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     private void setListener() {
@@ -155,6 +150,7 @@ public class SurveymenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), DetailsurveyActivity.class);
                 intent.putExtra("variabel", "Perilaku Inovatif Guru");
+                intent.putExtra("isClicked", checker(GlobalValue.var1));
                 startActivity(intent);
             }
         });
@@ -164,6 +160,7 @@ public class SurveymenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), DetailsurveyActivity.class);
                 intent.putExtra("variabel", "Intensi Berinovasi");
+                intent.putExtra("isClicked", checker(GlobalValue.var2));
                 startActivity(intent);
             }
         });
@@ -173,6 +170,7 @@ public class SurveymenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), DetailsurveyActivity.class);
                 intent.putExtra("variabel", "Sikap Terhadap Inovasi");
+                intent.putExtra("isClicked", checker(GlobalValue.var3));
                 startActivity(intent);
             }
         });
@@ -182,6 +180,7 @@ public class SurveymenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), DetailsurveyActivity.class);
                 intent.putExtra("variabel", "Norma Subyektif terhadap Kreativitas");
+                intent.putExtra("isClicked", checker(GlobalValue.var4));
                 startActivity(intent);
             }
         });
@@ -191,6 +190,7 @@ public class SurveymenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), DetailsurveyActivity.class);
                 intent.putExtra("variabel", "Efikasi Berinovasi");
+                intent.putExtra("isClicked", checker(GlobalValue.var5));
                 startActivity(intent);
             }
         });
@@ -200,6 +200,7 @@ public class SurveymenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), DetailsurveyActivity.class);
                 intent.putExtra("variabel", "Budaya Organisasi Berorientasi Pembelajaran");
+                intent.putExtra("isClicked", checker(GlobalValue.var6));
                 startActivity(intent);
             }
         });
@@ -209,6 +210,7 @@ public class SurveymenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), DetailsurveyActivity.class);
                 intent.putExtra("variabel", "Self-Determination");
+                intent.putExtra("isClicked", checker(GlobalValue.var7));
                 startActivity(intent);
             }
         });

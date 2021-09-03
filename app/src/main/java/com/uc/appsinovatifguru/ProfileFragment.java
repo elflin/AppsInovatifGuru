@@ -2,6 +2,7 @@ package com.uc.appsinovatifguru;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -10,6 +11,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +71,16 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
-                profile_signout.setVisibility(View.GONE);
+                getContext().getSharedPreferences(GlobalValue.historyId, 0).edit().clear().apply();
+                SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+                sharedPreferencesEditor.putBoolean(GlobalValue.var1, false);
+                sharedPreferencesEditor.putBoolean(GlobalValue.var2, false);
+                sharedPreferencesEditor.putBoolean(GlobalValue.var3, false);
+                sharedPreferencesEditor.putBoolean(GlobalValue.var4, false);
+                sharedPreferencesEditor.putBoolean(GlobalValue.var5, false);
+                sharedPreferencesEditor.putBoolean(GlobalValue.var6, false);
+                sharedPreferencesEditor.putBoolean(GlobalValue.var7, false);
+                sharedPreferencesEditor.apply();
                 getActivity().finish();
                 startActivity(new Intent(getContext(), BeginlogoActivity.class));
             }

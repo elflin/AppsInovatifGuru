@@ -69,16 +69,18 @@ public class ResultFragment extends Fragment {
                                 JSONObject value = temp.getJSONObject("value");
 
                                 Result temp1 = new Result();
-                                temp1.setTanggal(temp.getString("updated_at"));
-                                temp1.setNilai1(String.valueOf(variabel.getInt("Perilaku Inovatif Guru")) + " ("+value.getString("Perilaku Inovatif Guru")+")");
-                                temp1.setNilai2(String.valueOf(variabel.getInt("Intensi Berinovasi")) + " ("+value.getString("Intensi Berinovasi")+")");
-                                temp1.setNilai3(String.valueOf(variabel.getInt("Sikap Terhadap Inovasi")) + " ("+value.getString("Sikap Terhadap Inovasi")+")");
-                                temp1.setNilai4(String.valueOf(variabel.getInt("Norma Subyektif terhadap Kreativitas")) + " ("+value.getString("Norma Subyektif terhadap Kreativitas")+")");
-                                temp1.setNilai5(String.valueOf(variabel.getInt("Efikasi Berinovasi")) + " ("+value.getString("Efikasi Berinovasi")+")");
-                                temp1.setNilai6(String.valueOf(variabel.getInt("Budaya Organisasi Berorientasi Pembelajaran")) + " ("+value.getString("Budaya Organisasi Berorientasi Pembelajaran")+")");
-                                temp1.setNilai7(String.valueOf(variabel.getInt("Self-Determination")) + " ("+value.getString("Self-Determination")+")");
+                                if(!temp.getString("updated_at").equalsIgnoreCase("null")) {
+                                    temp1.setTanggal(temp.getString("updated_at"));
+                                    temp1.setNilai1(String.valueOf(variabel.getInt("Perilaku Inovatif Guru")) + " (" + value.getString("Perilaku Inovatif Guru") + ")");
+                                    temp1.setNilai2(String.valueOf(variabel.getInt("Intensi Berinovasi")) + " (" + value.getString("Intensi Berinovasi") + ")");
+                                    temp1.setNilai3(String.valueOf(variabel.getInt("Sikap Terhadap Inovasi")) + " (" + value.getString("Sikap Terhadap Inovasi") + ")");
+                                    temp1.setNilai4(String.valueOf(variabel.getInt("Norma Subyektif terhadap Kreativitas")) + " (" + value.getString("Norma Subyektif terhadap Kreativitas") + ")");
+                                    temp1.setNilai5(String.valueOf(variabel.getInt("Efikasi Berinovasi")) + " (" + value.getString("Efikasi Berinovasi") + ")");
+                                    temp1.setNilai6(String.valueOf(variabel.getInt("Budaya Organisasi Berorientasi Pembelajaran")) + " (" + value.getString("Budaya Organisasi Berorientasi Pembelajaran") + ")");
+                                    temp1.setNilai7(String.valueOf(variabel.getInt("Self-Determination")) + " (" + value.getString("Self-Determination") + ")");
 
-                                listResult.add(temp1);
+                                    listResult.add(temp1);
+                                }
                             }
                             resultRecyclerViewAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {

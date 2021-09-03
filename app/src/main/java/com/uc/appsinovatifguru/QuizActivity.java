@@ -155,7 +155,7 @@ public class QuizActivity extends AppCompatActivity implements SoalListener {
                         try {
                             if (response.getString("status").equalsIgnoreCase("suksess")){
                                 SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-                                if(variabel.equalsIgnoreCase("Perilaku Inovartif Guru")){
+                                if(variabel.equalsIgnoreCase("Perilaku Inovatif Guru")){
                                     sharedPreferencesEditor.putBoolean(GlobalValue.var1, true);
                                 }else if(variabel.equalsIgnoreCase("Intensi Berinovasi")){
                                     sharedPreferencesEditor.putBoolean(GlobalValue.var2, true);
