@@ -114,7 +114,11 @@ public class MainActivity extends AppCompatActivity {
                             }else{
                                 dataCurrUser.setIlmuPendidikan(false);
                             }
-                            main_nama.setText(dataCurrUser.getName().substring(0, dataCurrUser.getName().indexOf(" ")));
+                            try {
+                                main_nama.setText(dataCurrUser.getName().substring(0, dataCurrUser.getName().indexOf(" ")));
+                            }catch (Exception e){
+                                main_nama.setText(dataCurrUser.getName());
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
 
