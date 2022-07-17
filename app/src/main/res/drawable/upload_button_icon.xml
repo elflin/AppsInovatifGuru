@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/ic_file_arrow_up_solid"
+        android:width="18dp"
+        android:height="26dp">
+    </item>
+</layer-list>

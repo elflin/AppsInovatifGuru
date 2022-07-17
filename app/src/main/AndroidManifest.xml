@@ -3,6 +3,13 @@
     package="com.uc.appsinovatifguru">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <queries>
+        <intent>
+            <action android:name="com.google.android.youtube.api.service.START" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -12,6 +19,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppsInovatifGuru"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".TestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EvalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TrainingActivity"
+            android:exported="false" />
         <activity
             android:name=".QuizActivity"
             android:exported="true" />
