@@ -7,9 +7,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.uc.appsinovatifguru.Adapter.TrainingRecyclerViewAdapter;
 import com.uc.appsinovatifguru.Model.Training;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -18,12 +30,15 @@ public class TrainingActivity extends AppCompatActivity {
     private RecyclerView training_recyclerview;
     private TrainingRecyclerViewAdapter trainingAdapter;
     private ArrayList<Training> listTraining;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
         initView();
+        createProgressHistory();
         setListener();
     }
 
@@ -40,6 +55,8 @@ public class TrainingActivity extends AppCompatActivity {
         training_back = findViewById(R.id. training_back);
         training_recyclerview = findViewById(R.id. training_recyclerview);
         listTraining = new ArrayList<>();
+        mAuth = FirebaseAuth.getInstance();
+        currUser = mAuth.getCurrentUser();
         addDummyData();
         
         trainingAdapter = new TrainingRecyclerViewAdapter(listTraining, getLifecycle());
@@ -94,5 +111,60 @@ public class TrainingActivity extends AppCompatActivity {
         listTraining.add(pertemuan3);
         listTraining.add(postTest);
         listTraining.add(eval);
+    }
+
+    public void createProgressHistory() {
+        String url = GlobalValue.serverURL+"getLastProgressHistory";
+        RequestQueue myQueue = Volley.newRequestQueue(this);
+
+        JSONObject parameter = new JSONObject();
+        try {
+            parameter.put("uid", currUser.getUid());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(TrainingActivity.this, "Progress history already exists", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        String url = GlobalValue.serverURL+"createProgressHistory";
+                        RequestQueue myQueue = Volley.newRequestQueue(TrainingActivity.this);
+
+                        JSONObject parameter = new JSONObject();
+                        try {
+                            parameter.put("id", currUser.getUid());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        Toast.makeText(TrainingActivity.this, "Create progress history successful", Toast.LENGTH_SHORT).show();
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        error.printStackTrace();
+                                    }
+                                }
+                        );
+
+                        myQueue.add(request);
+                    }
+                }
+        );
+
+        myQueue.add(request);
     }
 }
