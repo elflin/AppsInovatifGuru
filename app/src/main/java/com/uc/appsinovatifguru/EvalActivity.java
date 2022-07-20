@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -129,11 +130,10 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
                             if (response.getString("status").equalsIgnoreCase("200")){
                                 SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
                                 sharedPreferencesEditor.putBoolean(GlobalValue.eval, true);
-
                                 sharedPreferencesEditor.apply();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
+
+                                finish();
+                                Toast.makeText(EvalActivity.this, "Eval successful", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

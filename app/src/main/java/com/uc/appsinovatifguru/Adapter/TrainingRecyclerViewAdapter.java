@@ -109,13 +109,16 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
                 @Override
                 public void onClick(View view) {
                     if (listTraining.get(holder.getAdapterPosition()).isEval()) {
-                        Intent intent1 = new Intent(view.getContext(), EvalActivity.class);
-                        intent1.putExtra("variabel", "Intensi Berinovasi");
-                        view.getContext().startActivity(intent1);
+                        Intent intent = new Intent(view.getContext(), EvalActivity.class);
+                        view.getContext().startActivity(intent);
                     } else {
-                        Intent intent1 = new Intent(view.getContext(), TestActivity.class);
-                        intent1.putExtra("variabel", "Intensi Berinovasi");
-                        view.getContext().startActivity(intent1);
+                        Intent intent = new Intent(view.getContext(), TestActivity.class);
+                        if (listTraining.get(holder.getAdapterPosition()).isPreTest()) {
+                            intent.putExtra("tipe", "pretest");
+                        } else {
+                            intent.putExtra("tipe", "posttest");
+                        }
+                        view.getContext().startActivity(intent);
                     }
                 }
             });

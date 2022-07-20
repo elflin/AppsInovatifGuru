@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -129,6 +131,16 @@ public class TrainingActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(TrainingActivity.this, "Progress history already exists", Toast.LENGTH_SHORT).show();
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        if (!sharedPreferences.contains(GlobalValue.progressId)) {
+                            try {
+                                SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+                                sharedPreferencesEditor.putInt(GlobalValue.progressId, response.getJSONObject("data").getInt("id"));
+                                sharedPreferencesEditor.apply();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -149,6 +161,15 @@ public class TrainingActivity extends AppCompatActivity {
                                 new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
+                                        try {
+                                            if (response.getString("status").equalsIgnoreCase("suksess")){
+                                                SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+                                                sharedPreferencesEditor.putInt(GlobalValue.progressId, response.getInt("historyId"));
+                                                sharedPreferencesEditor.apply();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                         Toast.makeText(TrainingActivity.this, "Create progress history successful", Toast.LENGTH_SHORT).show();
                                     }
                                 },
