@@ -9,10 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -138,7 +136,6 @@ public class TrainingActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(TrainingActivity.this, "Progress history already exists", Toast.LENGTH_SHORT).show();
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         if (!sharedPreferences.contains(GlobalValue.progressHistoryId)) {
                             try {
@@ -178,7 +175,6 @@ public class TrainingActivity extends AppCompatActivity {
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
-                                        Toast.makeText(TrainingActivity.this, "Create progress history successful", Toast.LENGTH_SHORT).show();
                                     }
                                 },
                                 new Response.ErrorListener() {
