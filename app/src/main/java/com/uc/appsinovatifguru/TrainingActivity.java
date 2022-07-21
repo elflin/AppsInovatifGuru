@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -243,7 +244,11 @@ public class TrainingActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        checkProgress();
-        trainingAdapter.notifyDataSetChanged();
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                checkProgress();
+                trainingAdapter.notifyDataSetChanged();
+            }
+        }
     }
 }

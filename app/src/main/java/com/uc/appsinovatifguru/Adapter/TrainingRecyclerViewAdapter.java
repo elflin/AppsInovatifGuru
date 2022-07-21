@@ -71,7 +71,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             holder.itemTrainingPertemuanDownloadPdf.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(listTraining.get(position).getLink_ppt()));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(listTraining.get(holder.getAdapterPosition()).getLink_ppt()));
                     view.getContext().startActivity(intent);
                 }
             });
@@ -103,20 +103,18 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             String buttonText = "Kerjakan " + listTraining.get(position).getJudul();
             holder.itemTrainingTestEvaluasiButton.setText(buttonText);
 
-            if (listTraining.get(position).getAttempts() != 0) {
-                holder.itemTrainingTestDoneTextView.setVisibility(View.VISIBLE);
-                int maxAttempt = listTraining.get(position).getJudul().equals("Evaluasi Pelatihan") ? 1 : 2;
-                String done = String.format("Anda telah mengerjakan bagian ini sebanyak %s kali\n(maksimal pengerjaan: %s kali)",
+            int maxAttempt = listTraining.get(position).getJudul().equals("Evaluasi Pelatihan") ? 1 : 2;
+            String done = String.format("Anda telah mengerjakan bagian ini sebanyak %s kali\n(maksimal pengerjaan: %s kali)",
                     listTraining.get(position).getAttempts(),
                     maxAttempt
-                );
-                holder.itemTrainingTestDoneTextView.setText(done);
+            );
+            holder.itemTrainingTestDoneTextView.setText(done);
+            if (listTraining.get(position).getAttempts() != 0) {
                 if (listTraining.get(position).getAttempts() == maxAttempt) {
                     holder.itemTrainingTestEvaluasiButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
                     holder.itemTrainingTestEvaluasiButton.setEnabled(false);
                 }
             } else {
-                holder.itemTrainingTestDoneTextView.setVisibility(View.GONE);
                 holder.itemTrainingTestEvaluasiButton.getBackground().clearColorFilter();
                 holder.itemTrainingTestEvaluasiButton.setEnabled(true);
             }
@@ -127,7 +125,8 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
                     if (listTraining.get(holder.getAdapterPosition()).getJudul().equals("Evaluasi Pelatihan")) {
                         Intent intent = new Intent(view.getContext(), EvalActivity.class);
                         intent.putExtra("id", listTraining.get(holder.getAdapterPosition()).getId());
-                        view.getContext().startActivity(intent);
+                        Activity origin = (Activity) view.getContext();
+                        origin.startActivityForResult(intent, 1);
                     } else {
                         Intent intent = new Intent(view.getContext(), TestActivity.class);
                         intent.putExtra("id", listTraining.get(holder.getAdapterPosition()).getId());
@@ -137,7 +136,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
                             intent.putExtra("tipe", "posttest");
                         }
                         Activity origin = (Activity) view.getContext();
-                        origin.startActivityForResult(intent, 200);
+                        origin.startActivityForResult(intent, 1);
                     }
                 }
             });

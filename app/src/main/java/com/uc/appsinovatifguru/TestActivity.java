@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -178,6 +180,8 @@ public class TestActivity extends AppCompatActivity implements TestListener {
                                 new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
+                                        Intent returnIntent = new Intent();
+                                        setResult(Activity.RESULT_OK, returnIntent);
                                         finish();
                                         Toast.makeText(TestActivity.this, "Test successful", Toast.LENGTH_SHORT).show();
                                     }

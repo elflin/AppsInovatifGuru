@@ -57,6 +57,8 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
         eval_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });
