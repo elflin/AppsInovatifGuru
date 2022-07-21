@@ -77,13 +77,16 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
         } else if (holder.getItemViewType() == R.layout.itemrv_trainingpertemuan) {
             holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.GONE);
             holder.itemTrainingPertemuanJudulTextView.setText(listTraining.get(position).getJudul());
-            if (listTraining.get(position).getType().equals("pertemuansubmit")) {
+            if (!listTraining.get(position).getJudul().equals("Pertemuan 1: Pengantar")) {
                 holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.VISIBLE);
             }
 
             holder.itemTrainingPertemuanWebView.getSettings().setJavaScriptEnabled(true);
             holder.itemTrainingPertemuanWebView.setWebChromeClient(new WebChromeClient());
-            String embed = "<iframe width=\"100%\" height=\"100%\" src=\"" + listTraining.get(position).getLink() + "\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+            String link = listTraining.get(position).getLink();
+            String embedLink = "https://www.youtube.com/embed/" + link.substring(link.lastIndexOf("/"));
+            System.out.println(embedLink);
+            String embed = "<iframe width=\"100%\" height=\"100%\" src=\"" + embedLink + "\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
             holder.itemTrainingPertemuanWebView.loadData(embed, "text/html", "utf-8");
 
             holder.itemTrainingPertemuanUploadPdfButton.setOnClickListener(new View.OnClickListener() {
@@ -110,14 +113,14 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             holder.itemTrainingTestEvaluasiButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (listTraining.get(holder.getAdapterPosition()).getType().equals("eval")) {
+                    if (listTraining.get(holder.getAdapterPosition()).getJudul().equals("Evaluasi Pelatihan")) {
                         Intent intent = new Intent(view.getContext(), EvalActivity.class);
                         intent.putExtra("id", listTraining.get(holder.getAdapterPosition()).getId());
                         view.getContext().startActivity(intent);
                     } else {
                         Intent intent = new Intent(view.getContext(), TestActivity.class);
                         intent.putExtra("id", listTraining.get(holder.getAdapterPosition()).getId());
-                        if (listTraining.get(holder.getAdapterPosition()).getType().equals("pretest")) {
+                        if (listTraining.get(holder.getAdapterPosition()).getJudul().equals("Pre-test Learning")) {
                             intent.putExtra("tipe", "pretest");
                         } else {
                             intent.putExtra("tipe", "posttest");
@@ -145,8 +148,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             case "consent":
                 id = R.layout.itemrv_trainingconsent;
                 break;
-            case "pertemuan":
-            case "pertemuansubmit":
+            case "materi":
                 id = R.layout.itemrv_trainingpertemuan;
                 break;
             default:

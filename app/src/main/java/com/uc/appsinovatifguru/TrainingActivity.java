@@ -60,7 +60,6 @@ public class TrainingActivity extends AppCompatActivity {
     private void initView() {
         training_back = findViewById(R.id. training_back);
         training_recyclerview = findViewById(R.id. training_recyclerview);
-        listTraining = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
         currUser = mAuth.getCurrentUser();
 
@@ -71,6 +70,19 @@ public class TrainingActivity extends AppCompatActivity {
     }
 
     public void getAllPelatihans() {
+        listTraining = new ArrayList<>();
+
+        Training perkenalan = new Training();
+        perkenalan.setJudul("Perkenalan");
+        perkenalan.setType("perkenalan");
+
+        Training consent = new Training();
+        consent.setJudul("Informed Consent");
+        consent.setType("consent");
+
+        listTraining.add(perkenalan);
+        listTraining.add(consent);
+
         String url = GlobalValue.serverURL+"pelatihans";
         RequestQueue myQueue = Volley.newRequestQueue(this);
 
