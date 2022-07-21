@@ -45,8 +45,13 @@ public class TrainingActivity extends AppCompatActivity {
         getAllPelatihans();
         initView();
         createProgressHistory();
-        checkProgress();
         setListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkProgress();
     }
 
     private void setListener() {
@@ -195,7 +200,6 @@ public class TrainingActivity extends AppCompatActivity {
     }
 
     private void checkProgress() {
-        // ada bug, function ini kadang tidak jalan
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TrainingActivity.this);
         int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
         String url = GlobalValue.serverURL+"showProgress";

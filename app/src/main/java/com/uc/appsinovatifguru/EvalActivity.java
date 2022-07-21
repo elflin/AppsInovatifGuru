@@ -153,7 +153,6 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
                                         try {
                                             if (response.getString("status").equalsIgnoreCase("200")){
                                                 finish();
-                                                Toast.makeText(EvalActivity.this, "Eval successful", Toast.LENGTH_SHORT).show();
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();

@@ -183,7 +183,6 @@ public class TestActivity extends AppCompatActivity implements TestListener {
                                         Intent returnIntent = new Intent();
                                         setResult(Activity.RESULT_OK, returnIntent);
                                         finish();
-                                        Toast.makeText(TestActivity.this, "Test successful", Toast.LENGTH_SHORT).show();
                                     }
                                 },
                                 new Response.ErrorListener() {
