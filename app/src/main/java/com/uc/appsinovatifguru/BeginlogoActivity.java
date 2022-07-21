@@ -37,15 +37,15 @@ public class BeginlogoActivity extends AppCompatActivity {
     private void checkOnboarding(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         // Check if we need to display our OnboardingSupportFragment
-        if (!sharedPreferences.getBoolean(GlobalValue.Onboarding_Complete, false)) {
-            // The user hasn't seen the OnboardingSupportFragment yet, so show it
-            startActivity(new Intent(this, OnboardingActivity.class));
-        }else{
+//        if (!sharedPreferences.getBoolean(GlobalValue.Onboarding_Complete, false)) {
+//            // The user hasn't seen the OnboardingSupportFragment yet, so show it
+//            startActivity(new Intent(this, OnboardingActivity.class));
+//        }else{
             if(currentUser == null) {
                 startActivity(new Intent(this, LoginActivity.class));
             }else{
                 startActivity(new Intent(this, MainActivity.class));
             }
-        }
+//        }
     }
 }

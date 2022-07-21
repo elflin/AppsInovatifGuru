@@ -60,27 +60,29 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = login_email.getEditText().getText().toString().toLowerCase().trim();
                 String rawPass = login_password.getEditText().getText().toString().toLowerCase().trim();
-                String password = "";
-                try {
-                    password = AESCrypt.encrypt(rawPass);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d("1", "signInWithEmail:success");
-                                    gotoMainClass();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w("1", "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
+                if(validate(email, rawPass)) {
+                    String password = "";
+                    try {
+                        password = AESCrypt.encrypt(rawPass);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        Log.d("1", "signInWithEmail:success");
+                                        gotoMainClass();
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w("1", "signInWithEmail:failure", task.getException());
+                                        Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
             }
         });
 
@@ -90,6 +92,23 @@ public class LoginActivity extends AppCompatActivity {
                 mStartForResult.launch(new Intent(getBaseContext(), RegisterActivity.class));
             }
         });
+    }
+
+    private boolean validate(String email, String rawPass) {
+        boolean cek = true;
+        if (email.isEmpty()){
+            cek = false;
+            login_email.setError("Tolong lengkapi email");
+        }else{
+            login_email.setError("");
+        }
+        if (rawPass.isEmpty()){
+            cek = false;
+            login_password.setError("Tolong lengkapi password");
+        }else{
+            login_password.setError("");
+        }
+        return cek;
     }
 
     private void gotoMainClass(){

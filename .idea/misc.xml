@@ -3,6 +3,37 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/drawable/upload_button_icon.xml" value="0.241" />
+        <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_eval.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_trainingconsent.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_traininginformedconsent.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_trainingperkenalan.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_trainingpertemuan.xml" value="0.33" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/drawable-mdpi/green_button.xml" value="0.298" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/drawable/red_button.xml" value="0.298" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_beginlogo.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_detailsurvey.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_eval.xml" value="0.25" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_login.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_main.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_profile.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_quiz.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_register.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_surveymenu.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_test.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_training.xml" value="0.33" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/fragment_datasaya.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/fragment_home.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/fragment_result.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_eval.xml" value="0.33" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_main.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_result.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_riwayat1.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_soal.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_training.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_trainingpertemuan.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_trainingtest.xml" value="0.33" />
+        <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/layout_onboardingscreen.xml" value="0.35778985507246375" />
         <entry key="app/src/main/res/drawable-anydpi/botnavitem_profile.xml" value="0.20185185185185187" />
         <entry key="app/src/main/res/drawable-anydpi/ic_back.xml" value="0.19907407407407407" />
         <entry key="app/src/main/res/drawable-anydpi/ic_edit_pp.xml" value="0.19907407407407407" />
@@ -49,7 +80,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

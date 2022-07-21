@@ -64,30 +64,55 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = register_email.getEditText().getText().toString().toLowerCase().trim();
                 String rawPass = register_password.getEditText().getText().toString().trim();
                 String password = "";
-                try {
-                    password = AESCrypt.encrypt(rawPass);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                if(validate(name, email, rawPass)) {
+                    try {
+                        password = AESCrypt.encrypt(rawPass);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                String finalPassword = password;
-                mAuth.createUserWithEmailAndPassword(email, finalPassword)
-                        .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    user = mAuth.getCurrentUser();
-                                    User temp = new User(user.getUid(), name, email, rawPass);
-                                    postData(temp);
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(getBaseContext(),"Registrasi gagal", Toast.LENGTH_LONG).show();
+                    String finalPassword = password;
+                    mAuth.createUserWithEmailAndPassword(email, finalPassword)
+                            .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        user = mAuth.getCurrentUser();
+                                        User temp = new User(user.getUid(), name, email, rawPass);
+                                        postData(temp);
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Toast.makeText(getBaseContext(), "Registrasi gagal", Toast.LENGTH_LONG).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
             }
         });
+    }
+
+    private boolean validate(String name, String email, String rawPass) {
+        boolean cek = true;
+        if (name.isEmpty()){
+            cek = false;
+            register_username.setError("Tolong lengkapi nama");
+        }else{
+            register_username.setError("");
+        }
+        if (email.isEmpty()){
+            cek = false;
+            register_email.setError("Tolong lengkapi email");
+        }else{
+            register_email.setError("");
+        }
+        if (rawPass.isEmpty()){
+            cek = false;
+            register_password.setError("Tolong lengkapi password");
+        }else{
+            register_password.setError("");
+        }
+        return cek;
     }
 
     private void postData(User temp){
