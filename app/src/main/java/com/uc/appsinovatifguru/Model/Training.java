@@ -7,6 +7,7 @@ public class Training {
     private String deskripsi;
     private String link;
     private String type;
+    private String link_ppt = "https://www.google.com/";
     private int attempts = 0;
     private String createdAt;
     private String updatedAt;
@@ -49,6 +50,14 @@ public class Training {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getLink_ppt() {
+        return link_ppt;
+    }
+
+    public void setLink_ppt(String link_ppt) {
+        this.link_ppt = link_ppt;
     }
 
     public int getAttempts() {

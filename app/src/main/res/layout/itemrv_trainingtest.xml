@@ -34,7 +34,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/itemTrainingTestJudulTextView"
             app:layout_constraintStart_toStartOf="@+id/itemTrainingTestJudulTextView"
-            app:layout_constraintTop_toBottomOf="@+id/itemTrainingTestJudulTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/itemTrainingTestDeskripsiTextView" />
 
         <TextView
             android:id="@+id/itemTrainingTestJudulTextView"
@@ -65,6 +65,20 @@
             app:layout_constraintEnd_toEndOf="@+id/itemTrainingTestEvaluasiButton"
             app:layout_constraintStart_toStartOf="@+id/itemTrainingTestEvaluasiButton"
             app:layout_constraintTop_toBottomOf="@+id/itemTrainingTestEvaluasiButton" />
+
+        <TextView
+            android:id="@+id/itemTrainingTestDeskripsiTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_weight="7"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nostrum asperiores explicabo minus. Eius vel, vero ea velit laudantium odit earum harum itaque qui repudiandae minus ab."
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/itemTrainingTestJudulTextView"
+            app:layout_constraintStart_toStartOf="@+id/itemTrainingTestJudulTextView"
+            app:layout_constraintTop_toBottomOf="@+id/itemTrainingTestJudulTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

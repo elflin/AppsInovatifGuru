@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,19 +57,25 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
         if (holder.getItemViewType() == R.layout.itemrv_trainingperkenalan) {
             holder.itemTrainingPerkenalanJudulTextView.setText(listTraining.get(position).getJudul());
         } else if (holder.getItemViewType() == R.layout.itemrv_trainingconsent) {
-            holder.itemTrainingConsentUploadPdfButton.setOnClickListener(new View.OnClickListener() {
+            holder.itemTrainingConsentFormLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("application/pdf");
-
-                    ((Activity) view.getContext()).startActivityForResult(intent, 2);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/forms/about/"));
+                    view.getContext().startActivity(intent);
                 }
             });
         } else if (holder.getItemViewType() == R.layout.itemrv_trainingpertemuan) {
             holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.GONE);
             holder.itemTrainingPertemuanJudulTextView.setText(listTraining.get(position).getJudul());
+            holder.itemTrainingPertemuanDeskripsiTextView.setText(listTraining.get(position).getDeskripsi());
+            holder.itemTrainingPertemuanDownloadPdf.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(listTraining.get(position).getLink_ppt()));
+                    view.getContext().startActivity(intent);
+                }
+            });
+
             if (!listTraining.get(position).getJudul().equals("Pertemuan 1: Pengantar")) {
                 holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.VISIBLE);
             }
@@ -76,7 +84,6 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             holder.itemTrainingPertemuanWebView.setWebChromeClient(new WebChromeClient());
             String link = listTraining.get(position).getLink();
             String embedLink = "https://www.youtube.com/embed/" + link.substring(link.lastIndexOf("/"));
-            System.out.println(embedLink);
             String embed = "<iframe width=\"100%\" height=\"100%\" src=\"" + embedLink + "\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
             holder.itemTrainingPertemuanWebView.loadData(embed, "text/html", "utf-8");
 
@@ -92,6 +99,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             });
         } else {
             holder.itemTrainingTestJudulTextView.setText(listTraining.get(position).getJudul());
+            holder.itemTrainingTestDeskripsiTextView.setText(listTraining.get(position).getDeskripsi());
             String buttonText = "Kerjakan " + listTraining.get(position).getJudul();
             holder.itemTrainingTestEvaluasiButton.setText(buttonText);
 
@@ -167,14 +175,16 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
         private TextView itemTrainingPerkenalanJudulTextView;
         private TextView itemTrainingPerkenalanProfilTextView;
 
-        private Button itemTrainingConsentUploadPdfButton;
+        private ConstraintLayout itemTrainingConsentFormLink;
 
         private TextView itemTrainingPertemuanJudulTextView;
-        private Button itemTrainingPertemuanDownloadPdfButton;
+        private TextView itemTrainingPertemuanDeskripsiTextView;
+        private ConstraintLayout itemTrainingPertemuanDownloadPdf;
         private Button itemTrainingPertemuanUploadPdfButton;
         WebView itemTrainingPertemuanWebView;
 
         private TextView itemTrainingTestJudulTextView;
+        private TextView itemTrainingTestDeskripsiTextView;
         private TextView itemTrainingTestDoneTextView;
         private Button itemTrainingTestEvaluasiButton;
 
@@ -184,14 +194,16 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             itemTrainingPerkenalanJudulTextView = itemView.findViewById(R.id.itemTrainingPerkenalanJudulTextView);
             itemTrainingPerkenalanProfilTextView = itemView.findViewById(R.id.itemTrainingPerkenalanProfilTextView);
 
-            itemTrainingConsentUploadPdfButton = itemView.findViewById(R.id.itemTrainingConsentUploadPdfButton);
+            itemTrainingConsentFormLink = itemView.findViewById(R.id.itemTrainingConsentFormLink);
 
             itemTrainingPertemuanJudulTextView = itemView.findViewById(R.id.itemTrainingPertemuanJudulTextView);
-//            itemTrainingPertemuanDownloadPdfButton = itemView.findViewById(R.id.itemTrainingPertemuanDownloadPdfButton);
+            itemTrainingPertemuanDeskripsiTextView = itemView.findViewById(R.id.itemTrainingPertemuanDeskripsiTextView);
+            itemTrainingPertemuanDownloadPdf = itemView.findViewById(R.id.itemTrainingPertemuanDownloadPdf);
             itemTrainingPertemuanUploadPdfButton = itemView.findViewById(R.id.itemTrainingPertemuanUploadPdfButton);
             itemTrainingPertemuanWebView = itemView.findViewById(R.id.itemTrainingPertemuanWebView);
 
             itemTrainingTestJudulTextView = itemView.findViewById(R.id.itemTrainingTestJudulTextView);
+            itemTrainingTestDeskripsiTextView = itemView.findViewById(R.id.itemTrainingTestDeskripsiTextView);
             itemTrainingTestDoneTextView = itemView.findViewById(R.id.itemTrainingTestDoneTextView);
             itemTrainingTestEvaluasiButton = itemView.findViewById(R.id.itemTrainingTestEvaluasiButton);
         }
