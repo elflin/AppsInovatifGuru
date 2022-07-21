@@ -2,12 +2,12 @@ package com.uc.appsinovatifguru.Model;
 
 public class Training {
 
-    private Integer id;
+    private Integer id = -1;
     private String judul;
     private String deskripsi;
     private String link;
     private String type;
-    private int status;
+    private int attempts = 0;
     private String createdAt;
     private String updatedAt;
 
@@ -51,12 +51,12 @@ public class Training {
         this.type = type;
     }
 
-    public int getStatus() {
-        return status;
+    public int getAttempts() {
+        return attempts;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setAttempts(int attempts) {
+        this.attempts = attempts;
     }
 
     public String getCreatedAt() {

@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/proxima_nova_regular"
-            android:text="Anda telah mengerjakan bagian ini"
+            android:text="text"
             android:textAlignment="center"
             android:textColor="#606060"
             android:textSize="14sp"

@@ -2,33 +2,24 @@ package com.uc.appsinovatifguru.Adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.provider.DocumentsContract;
-import android.util.Log;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uc.appsinovatifguru.EvalActivity;
-import com.uc.appsinovatifguru.GlobalValue;
-import com.uc.appsinovatifguru.MainActivity;
 import com.uc.appsinovatifguru.Model.Training;
-import com.uc.appsinovatifguru.QuizActivity;
 import com.uc.appsinovatifguru.R;
 import com.uc.appsinovatifguru.TestActivity;
-import com.uc.appsinovatifguru.TrainingActivity;
 
 import java.util.ArrayList;
 
@@ -104,10 +95,22 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             String buttonText = "Kerjakan " + listTraining.get(position).getJudul();
             holder.itemTrainingTestEvaluasiButton.setText(buttonText);
 
-            if (listTraining.get(position).getStatus() == 1) {
+            if (listTraining.get(position).getAttempts() != 0) {
                 holder.itemTrainingTestDoneTextView.setVisibility(View.VISIBLE);
+                int maxAttempt = listTraining.get(position).getJudul().equals("Evaluasi Pelatihan") ? 1 : 2;
+                String done = String.format("Anda telah mengerjakan bagian ini sebanyak %s kali\n(maksimal pengerjaan: %s kali)",
+                    listTraining.get(position).getAttempts(),
+                    maxAttempt
+                );
+                holder.itemTrainingTestDoneTextView.setText(done);
+                if (listTraining.get(position).getAttempts() == maxAttempt) {
+                    holder.itemTrainingTestEvaluasiButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
+                    holder.itemTrainingTestEvaluasiButton.setEnabled(false);
+                }
             } else {
                 holder.itemTrainingTestDoneTextView.setVisibility(View.GONE);
+                holder.itemTrainingTestEvaluasiButton.getBackground().clearColorFilter();
+                holder.itemTrainingTestEvaluasiButton.setEnabled(true);
             }
 
             holder.itemTrainingTestEvaluasiButton.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +128,8 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
                         } else {
                             intent.putExtra("tipe", "posttest");
                         }
-                        view.getContext().startActivity(intent);
+                        Activity origin = (Activity) view.getContext();
+                        origin.startActivityForResult(intent, 200);
                     }
                 }
             });

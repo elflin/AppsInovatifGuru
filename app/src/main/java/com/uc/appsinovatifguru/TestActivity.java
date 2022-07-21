@@ -67,7 +67,7 @@ public class TestActivity extends AppCompatActivity implements TestListener {
     }
 
     private void getSoalFromDB() {
-        String url = GlobalValue.serverURL+"testSoal/1";
+        String url = GlobalValue.serverURL+"testSoal/" + id;
         RequestQueue myQueue = Volley.newRequestQueue(this);
         JSONObject parameter = new JSONObject();
 
@@ -132,99 +132,17 @@ public class TestActivity extends AppCompatActivity implements TestListener {
 
     @Override
     public void OnSelesai() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int historyId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
-        String url = GlobalValue.serverURL+"insertTestJawaban";
-        RequestQueue myQueue = Volley.newRequestQueue(this);
-
-        JSONArray parameter1 = new JSONArray();
-        for (int i = 0; i< listSoal.size(); i++){
-            JSONObject temp1 = new JSONObject();
-            try {
-                temp1.put("id_progress", 1);
-                temp1.put("id_test_soal", listSoal.get(i).getId());
-                temp1.put("jawaban", listSoal.get(i).getJawaban());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            parameter1.put(temp1);
-        }
-
-        JSONObject parameter = new JSONObject();
-        try {
-            parameter.put("data", parameter1);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TestActivity.this);
-                        int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
-
-                        String url = GlobalValue.serverURL+"createProgress";
-                        RequestQueue myQueue = Volley.newRequestQueue(TestActivity.this);
-
-                        JSONObject parameter = new JSONObject();
-                        try {
-                            parameter.put("id_progress_histories", progressHistoryId);
-                            parameter.put("id_pelatihan", id);
-                            parameter.put("status", true);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
-                                new Response.Listener<JSONObject>() {
-                                    @Override
-                                    public void onResponse(JSONObject response) {
-
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        error.printStackTrace();
-                                    }
-                                }
-                        );
-
-                        myQueue.add(request);
-
-                        finish();
-                        Toast.makeText(TestActivity.this, "Test successful", Toast.LENGTH_SHORT).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        String body = "";
-                        //get status code here
-                        //get response body and parse with appropriate encoding
-                        if(error.networkResponse.data!=null) {
-                            body = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-                        }
-                        //do stuff with the body...
-                        Log.e("ERROR API", body);
-                    }
-                }
-        );
-
-        myQueue.add(request);
-    }
-
-    public void createProgress() {
-        String url = GlobalValue.serverURL+"showProgress";
-        RequestQueue myQueue = Volley.newRequestQueue(this);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TestActivity.this);
         int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
+
+        String url = GlobalValue.serverURL+"createProgress";
+        RequestQueue myQueue = Volley.newRequestQueue(TestActivity.this);
 
         JSONObject parameter = new JSONObject();
         try {
             parameter.put("id_progress_histories", progressHistoryId);
+            parameter.put("id_pelatihan", id);
+            parameter.put("status", true);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -233,29 +151,25 @@ public class TestActivity extends AppCompatActivity implements TestListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(TestActivity.this, "Progress history already exists", Toast.LENGTH_SHORT).show();
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        if (!sharedPreferences.contains(GlobalValue.progressHistoryId)) {
+                        String url = GlobalValue.serverURL+"insertTestJawaban";
+                        RequestQueue myQueue = Volley.newRequestQueue(TestActivity.this);
+
+                        JSONArray parameter1 = new JSONArray();
+                        for (int i = 0; i< listSoal.size(); i++){
+                            JSONObject temp1 = new JSONObject();
                             try {
-                                SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-                                sharedPreferencesEditor.putInt(GlobalValue.progressHistoryId, response.getJSONObject("data").getInt("id"));
-                                sharedPreferencesEditor.apply();
+                                temp1.put("id_progress", response.getInt("id"));
+                                temp1.put("id_test_soal", listSoal.get(i).getId());
+                                temp1.put("jawaban", listSoal.get(i).getJawaban());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+                            parameter1.put(temp1);
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        String url = GlobalValue.serverURL+"createProgress";
-                        RequestQueue myQueue = Volley.newRequestQueue(TestActivity.this);
 
                         JSONObject parameter = new JSONObject();
                         try {
-                            parameter.put("id_progress_histories", progressHistoryId);
+                            parameter.put("data", parameter1);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -264,27 +178,33 @@ public class TestActivity extends AppCompatActivity implements TestListener {
                                 new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
-                                        try {
-                                            if (response.getString("status").equalsIgnoreCase("suksess")){
-                                                SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-                                                sharedPreferencesEditor.putInt(GlobalValue.progressHistoryId, response.getInt("historyId"));
-                                                sharedPreferencesEditor.apply();
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Toast.makeText(TestActivity.this, "Create progress history successful", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                        Toast.makeText(TestActivity.this, "Test successful", Toast.LENGTH_SHORT).show();
                                     }
                                 },
                                 new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         error.printStackTrace();
+                                        String body = "";
+                                        //get status code here
+                                        //get response body and parse with appropriate encoding
+                                        if(error.networkResponse.data!=null) {
+                                            body = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                                        }
+                                        //do stuff with the body...
+                                        Log.e("ERROR API", body);
                                     }
                                 }
                         );
 
                         myQueue.add(request);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
                     }
                 }
         );

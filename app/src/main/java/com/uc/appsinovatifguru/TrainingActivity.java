@@ -1,12 +1,15 @@
 package com.uc.appsinovatifguru;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -20,7 +23,6 @@ import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.uc.appsinovatifguru.Adapter.TrainingRecyclerViewAdapter;
-import com.uc.appsinovatifguru.Model.Soal;
 import com.uc.appsinovatifguru.Model.Training;
 
 import org.json.JSONArray;
@@ -196,6 +198,7 @@ public class TrainingActivity extends AppCompatActivity {
     }
 
     private void checkProgress() {
+        // ada bug, function ini kadang tidak jalan
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TrainingActivity.this);
         int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
         String url = GlobalValue.serverURL+"showProgress";
@@ -212,36 +215,22 @@ public class TrainingActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
-                                new Response.Listener<JSONObject>() {
-                                    @Override
-                                    public void onResponse(JSONObject response) {
-                                        try {
-                                            JSONArray temp1 = response.getJSONArray("data");
+                        try {
+                            JSONArray temp1 = response.getJSONArray("data");
 
-                                            for (int i = 0; i < temp1.length(); i++) {
-                                                JSONObject temp2 = temp1.getJSONObject(i);
-                                                for (int j = 0; j < listTraining.size(); j++) {
-                                                    if (listTraining.get(j).getId() == temp2.getInt("id_pelatihan")) {
-                                                        listTraining.get(j).setStatus(temp2.getInt("status"));
-                                                    }
-                                                }
-                                            }
-                                            trainingAdapter.notifyDataSetChanged();
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        error.printStackTrace();
+                            for (int i = 0; i < listTraining.size(); i++) {
+                                listTraining.get(i).setAttempts(0);
+                                for (int j = 0; j < temp1.length(); j++) {
+                                    JSONObject temp2 = temp1.getJSONObject(j);
+                                    if (listTraining.get(i).getId() == temp2.getInt("id_pelatihan")) {
+                                        listTraining.get(i).setAttempts(listTraining.get(i).getAttempts() + 1);
                                     }
                                 }
-                        );
-
-                        myQueue.add(request);
+                            }
+                            trainingAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -253,5 +242,12 @@ public class TrainingActivity extends AppCompatActivity {
         );
 
         myQueue.add(request);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        checkProgress();
+        trainingAdapter.notifyDataSetChanged();
     }
 }
