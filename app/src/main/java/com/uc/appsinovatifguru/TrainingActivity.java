@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ImageButton;
@@ -22,13 +23,25 @@ import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.uc.appsinovatifguru.Adapter.TrainingRecyclerViewAdapter;
+import com.uc.appsinovatifguru.Helpers.FileUploadService;
+import com.uc.appsinovatifguru.Helpers.ServiceGenerator;
 import com.uc.appsinovatifguru.Model.Training;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
 
 public class TrainingActivity extends AppCompatActivity {
     private ImageButton training_back;
@@ -45,6 +58,7 @@ public class TrainingActivity extends AppCompatActivity {
         getAllPelatihans();
         initView();
         createProgressHistory();
+        checkProgress();
         setListener();
     }
 
@@ -253,6 +267,21 @@ public class TrainingActivity extends AppCompatActivity {
                 checkProgress();
                 trainingAdapter.notifyDataSetChanged();
             }
+        }
+
+        if (requestCode == 2) {
+            System.out.println("test");
+            FileUploadService service =
+                    ServiceGenerator.createService(FileUploadService.class);
+
+            File file = new File(data.getData().getPath());
+            RequestBody requestFile =
+                    RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+            MultipartBody.Part body =
+                    MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+
+            service.uploadFile(body);
         }
     }
 }
