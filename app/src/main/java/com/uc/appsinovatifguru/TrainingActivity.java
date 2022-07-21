@@ -45,6 +45,7 @@ public class TrainingActivity extends AppCompatActivity {
         getAllPelatihans();
         initView();
         createProgressHistory();
+        checkProgress();
         setListener();
     }
 
