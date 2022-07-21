@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +21,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.uc.appsinovatifguru.Adapter.TestRecyclerViewAdapter;
-import com.uc.appsinovatifguru.Listener.SoalListener;
 import com.uc.appsinovatifguru.Listener.TestListener;
 import com.uc.appsinovatifguru.Model.Test;
 
@@ -30,10 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TestActivity extends AppCompatActivity implements TestListener {
     private TextView test_title;
@@ -43,6 +39,7 @@ public class TestActivity extends AppCompatActivity implements TestListener {
     private ArrayList<Test> listSoal;
     private String tipe;
     Handler handler = new Handler();
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +122,7 @@ public class TestActivity extends AppCompatActivity implements TestListener {
         } else {
             test_title.setText("Post-test");
         }
+        id = getIntent().getIntExtra("id", -1);
     }
 
     @Override
@@ -135,7 +133,7 @@ public class TestActivity extends AppCompatActivity implements TestListener {
     @Override
     public void OnSelesai() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int historyId = sharedPreferences.getInt(GlobalValue.progressId, -1);
+        int historyId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
         String url = GlobalValue.serverURL+"insertTestJawaban";
         RequestQueue myQueue = Volley.newRequestQueue(this);
 
@@ -163,13 +161,37 @@ public class TestActivity extends AppCompatActivity implements TestListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-                        if (tipe.equalsIgnoreCase("pretest")) {
-                            sharedPreferencesEditor.putBoolean(GlobalValue.pretest, true);
-                        } else {
-                            sharedPreferencesEditor.putBoolean(GlobalValue.posttest, true);
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TestActivity.this);
+                        int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
+
+                        String url = GlobalValue.serverURL+"createProgress";
+                        RequestQueue myQueue = Volley.newRequestQueue(TestActivity.this);
+
+                        JSONObject parameter = new JSONObject();
+                        try {
+                            parameter.put("id_progress_histories", progressHistoryId);
+                            parameter.put("id_pelatihan", id);
+                            parameter.put("status", true);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        sharedPreferencesEditor.apply();
+
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        error.printStackTrace();
+                                    }
+                                }
+                        );
+
+                        myQueue.add(request);
 
                         finish();
                         Toast.makeText(TestActivity.this, "Test successful", Toast.LENGTH_SHORT).show();
@@ -187,6 +209,82 @@ public class TestActivity extends AppCompatActivity implements TestListener {
                         }
                         //do stuff with the body...
                         Log.e("ERROR API", body);
+                    }
+                }
+        );
+
+        myQueue.add(request);
+    }
+
+    public void createProgress() {
+        String url = GlobalValue.serverURL+"showProgress";
+        RequestQueue myQueue = Volley.newRequestQueue(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
+
+        JSONObject parameter = new JSONObject();
+        try {
+            parameter.put("id_progress_histories", progressHistoryId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(TestActivity.this, "Progress history already exists", Toast.LENGTH_SHORT).show();
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        if (!sharedPreferences.contains(GlobalValue.progressHistoryId)) {
+                            try {
+                                SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+                                sharedPreferencesEditor.putInt(GlobalValue.progressHistoryId, response.getJSONObject("data").getInt("id"));
+                                sharedPreferencesEditor.apply();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        String url = GlobalValue.serverURL+"createProgress";
+                        RequestQueue myQueue = Volley.newRequestQueue(TestActivity.this);
+
+                        JSONObject parameter = new JSONObject();
+                        try {
+                            parameter.put("id_progress_histories", progressHistoryId);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        try {
+                                            if (response.getString("status").equalsIgnoreCase("suksess")){
+                                                SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+                                                sharedPreferencesEditor.putInt(GlobalValue.progressHistoryId, response.getInt("historyId"));
+                                                sharedPreferencesEditor.apply();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        Toast.makeText(TestActivity.this, "Create progress history successful", Toast.LENGTH_SHORT).show();
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        error.printStackTrace();
+                                    }
+                                }
+                        );
+
+                        myQueue.add(request);
                     }
                 }
         );

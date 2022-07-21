@@ -2,6 +2,8 @@ package com.uc.appsinovatifguru.Adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uc.appsinovatifguru.EvalActivity;
+import com.uc.appsinovatifguru.GlobalValue;
 import com.uc.appsinovatifguru.MainActivity;
 import com.uc.appsinovatifguru.Model.Training;
 import com.uc.appsinovatifguru.QuizActivity;
@@ -60,11 +63,6 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
     public void onBindViewHolder(@NonNull EvalRecyclerViewHolder holder, int position) {
         if (holder.getItemViewType() == R.layout.itemrv_trainingperkenalan) {
             holder.itemTrainingPerkenalanJudulTextView.setText(listTraining.get(position).getJudul());
-            if (listTraining.get(position).getProfilPeneliti() != null) {
-                holder.itemTrainingPerkenalanProfilTextView.setText(listTraining.get(position).getProfilPeneliti());
-            } else {
-                holder.itemTrainingPerkenalanProfilTextView.setText(listTraining.get(position).getTemplateWord());
-            }
         } else if (holder.getItemViewType() == R.layout.itemrv_trainingconsent) {
             holder.itemTrainingConsentUploadPdfButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,15 +77,13 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
         } else if (holder.getItemViewType() == R.layout.itemrv_trainingpertemuan) {
             holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.GONE);
             holder.itemTrainingPertemuanJudulTextView.setText(listTraining.get(position).getJudul());
-//            holder.itemTrainingPertemuanDownloadPdfButton.setText(listTraining.get(position).getDownloadPdf());
-            if (listTraining.get(position).getUploadPdf() != null) {
+            if (listTraining.get(position).getType().equals("pertemuansubmit")) {
                 holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.VISIBLE);
-                holder.itemTrainingPertemuanUploadPdfButton.setText(listTraining.get(position).getUploadPdf());
             }
 
             holder.itemTrainingPertemuanWebView.getSettings().setJavaScriptEnabled(true);
             holder.itemTrainingPertemuanWebView.setWebChromeClient(new WebChromeClient());
-            String embed = "<iframe width=\"100%\" height=\"100%\" src=\"" + listTraining.get(position).getVideo() + "\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+            String embed = "<iframe width=\"100%\" height=\"100%\" src=\"" + listTraining.get(position).getLink() + "\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
             holder.itemTrainingPertemuanWebView.loadData(embed, "text/html", "utf-8");
 
             holder.itemTrainingPertemuanUploadPdfButton.setOnClickListener(new View.OnClickListener() {
@@ -105,15 +101,23 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             String buttonText = "Kerjakan " + listTraining.get(position).getJudul();
             holder.itemTrainingTestEvaluasiButton.setText(buttonText);
 
+            if (listTraining.get(position).getStatus() == 1) {
+                holder.itemTrainingTestDoneTextView.setVisibility(View.VISIBLE);
+            } else {
+                holder.itemTrainingTestDoneTextView.setVisibility(View.GONE);
+            }
+
             holder.itemTrainingTestEvaluasiButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (listTraining.get(holder.getAdapterPosition()).isEval()) {
+                    if (listTraining.get(holder.getAdapterPosition()).getType().equals("eval")) {
                         Intent intent = new Intent(view.getContext(), EvalActivity.class);
+                        intent.putExtra("id", listTraining.get(holder.getAdapterPosition()).getId());
                         view.getContext().startActivity(intent);
                     } else {
                         Intent intent = new Intent(view.getContext(), TestActivity.class);
-                        if (listTraining.get(holder.getAdapterPosition()).isPreTest()) {
+                        intent.putExtra("id", listTraining.get(holder.getAdapterPosition()).getId());
+                        if (listTraining.get(holder.getAdapterPosition()).getType().equals("pretest")) {
                             intent.putExtra("tipe", "pretest");
                         } else {
                             intent.putExtra("tipe", "posttest");
@@ -134,14 +138,20 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
     public int getItemViewType(int position) {
         int id;
 
-        if (listTraining.get(position).getProfilPeneliti() != null) {
-            id = R.layout.itemrv_trainingperkenalan;
-        } else if (listTraining.get(position).getTemplateWord() != null) {
-            id = R.layout.itemrv_trainingconsent;
-        } else if (listTraining.get(position).getDownloadPdf() != null) {
-            id = R.layout.itemrv_trainingpertemuan;
-        } else {
-            id = R.layout.itemrv_trainingtest;
+        switch (listTraining.get(position).getType()) {
+            case "perkenalan":
+                id = R.layout.itemrv_trainingperkenalan;
+                break;
+            case "consent":
+                id = R.layout.itemrv_trainingconsent;
+                break;
+            case "pertemuan":
+            case "pertemuansubmit":
+                id = R.layout.itemrv_trainingpertemuan;
+                break;
+            default:
+                id = R.layout.itemrv_trainingtest;
+                break;
         }
 
         return id;
@@ -159,6 +169,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
         WebView itemTrainingPertemuanWebView;
 
         private TextView itemTrainingTestJudulTextView;
+        private TextView itemTrainingTestDoneTextView;
         private Button itemTrainingTestEvaluasiButton;
 
 
@@ -175,6 +186,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             itemTrainingPertemuanWebView = itemView.findViewById(R.id.itemTrainingPertemuanWebView);
 
             itemTrainingTestJudulTextView = itemView.findViewById(R.id.itemTrainingTestJudulTextView);
+            itemTrainingTestDoneTextView = itemView.findViewById(R.id.itemTrainingTestDoneTextView);
             itemTrainingTestEvaluasiButton = itemView.findViewById(R.id.itemTrainingTestEvaluasiButton);
         }
     }

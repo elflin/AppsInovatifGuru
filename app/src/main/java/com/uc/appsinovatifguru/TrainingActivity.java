@@ -20,8 +20,10 @@ import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.uc.appsinovatifguru.Adapter.TrainingRecyclerViewAdapter;
+import com.uc.appsinovatifguru.Model.Soal;
 import com.uc.appsinovatifguru.Model.Training;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,8 +41,10 @@ public class TrainingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
+        getAllPelatihans();
         initView();
         createProgressHistory();
+        checkProgress();
         setListener();
     }
 
@@ -59,60 +63,50 @@ public class TrainingActivity extends AppCompatActivity {
         listTraining = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
         currUser = mAuth.getCurrentUser();
-        addDummyData();
-        
+
         trainingAdapter = new TrainingRecyclerViewAdapter(listTraining, getLifecycle());
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
         training_recyclerview.setLayoutManager(manager);
         training_recyclerview.setAdapter(trainingAdapter);
     }
 
-    private void addDummyData() {
-        Training perkenalan = new Training();
-        perkenalan.setJudul("Perkenalan");
-        perkenalan.setProfilPeneliti("profil");
+    public void getAllPelatihans() {
+        String url = GlobalValue.serverURL+"pelatihans";
+        RequestQueue myQueue = Volley.newRequestQueue(this);
 
-        Training consent = new Training();
-        consent.setJudul("Informed Consent");
-        consent.setTemplateWord("template word");
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray temp1 = response.getJSONArray("data");
 
-        Training preTest = new Training();
-        preTest.setJudul("Pre-test Learning");
-        preTest.setPreTest(true);
+                            for (int i = 0; i < temp1.length(); i++) {
+                                JSONObject temp2 = temp1.getJSONObject(i);
+                                Training temp3 = new Training();
+                                temp3.setId(temp2.getInt("id"));
+                                temp3.setJudul(temp2.getString("judul"));
+                                temp3.setDeskripsi(temp2.getString("deskripsi"));
+                                temp3.setLink(temp2.getString("link"));
+                                temp3.setType(temp2.getString("type"));
+//                                temp3.setStatus(temp2.getInt("status"));
+                                listTraining.add(temp3);
+                            }
+                            trainingAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        );
 
-        Training pertemuan1 = new Training();
-        pertemuan1.setJudul("Pertemuan 1: Pengantar");
-        pertemuan1.setDownloadPdf("p1 down");
-        pertemuan1.setVideo("https://www.youtube.com/embed/lYPe4MsALk4");
-
-        Training pertemuan2 = new Training();
-        pertemuan2.setJudul("Pertemuan 2: Membangun Sikap & Efikasi Berinovasi");
-        pertemuan2.setDownloadPdf("p2 down");
-        pertemuan2.setVideo("https://www.youtube.com/embed/Jb88eui8SqQ");
-        pertemuan2.setUploadPdf("p2 upload pdf");
-
-        Training pertemuan3 = new Training();
-        pertemuan3.setJudul("Pertemuan 3: Memperkuat Intensi Berinovasi");
-        pertemuan3.setDownloadPdf("p3 down");
-        pertemuan3.setVideo("https://www.youtube.com/embed/WfVF-Ec4naQ");
-        pertemuan3.setUploadPdf("p3 upload pdf");
-
-        Training postTest = new Training();
-        postTest.setJudul("Post-test Learning");
-        postTest.setPostTest(true);
-
-        Training eval = new Training();
-        eval.setJudul("Evaluasi");
-        eval.setEval(true);
-
-        listTraining.add(perkenalan);
-        listTraining.add(consent);
-        listTraining.add(preTest);
-        listTraining.add(pertemuan1);
-        listTraining.add(pertemuan2);
-        listTraining.add(pertemuan3);
-        listTraining.add(postTest);
-        listTraining.add(eval);
+        myQueue.add(request);
     }
 
     public void createProgressHistory() {
@@ -132,10 +126,10 @@ public class TrainingActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Toast.makeText(TrainingActivity.this, "Progress history already exists", Toast.LENGTH_SHORT).show();
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        if (!sharedPreferences.contains(GlobalValue.progressId)) {
+                        if (!sharedPreferences.contains(GlobalValue.progressHistoryId)) {
                             try {
                                 SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-                                sharedPreferencesEditor.putInt(GlobalValue.progressId, response.getJSONObject("data").getInt("id"));
+                                sharedPreferencesEditor.putInt(GlobalValue.progressHistoryId, response.getJSONObject("data").getInt("id"));
                                 sharedPreferencesEditor.apply();
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -164,7 +158,7 @@ public class TrainingActivity extends AppCompatActivity {
                                         try {
                                             if (response.getString("status").equalsIgnoreCase("suksess")){
                                                 SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-                                                sharedPreferencesEditor.putInt(GlobalValue.progressId, response.getInt("historyId"));
+                                                sharedPreferencesEditor.putInt(GlobalValue.progressHistoryId, response.getInt("historyId"));
                                                 sharedPreferencesEditor.apply();
                                             }
                                         } catch (JSONException e) {
@@ -182,6 +176,66 @@ public class TrainingActivity extends AppCompatActivity {
                         );
 
                         myQueue.add(request);
+                    }
+                }
+        );
+
+        myQueue.add(request);
+    }
+
+    private void checkProgress() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TrainingActivity.this);
+        int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
+        String url = GlobalValue.serverURL+"showProgress";
+        RequestQueue myQueue = Volley.newRequestQueue(this);
+
+        JSONObject parameter = new JSONObject();
+        try {
+            parameter.put("id_progress_histories", progressHistoryId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        try {
+                                            JSONArray temp1 = response.getJSONArray("data");
+
+                                            for (int i = 0; i < temp1.length(); i++) {
+                                                JSONObject temp2 = temp1.getJSONObject(i);
+                                                for (int j = 0; j < listTraining.size(); j++) {
+                                                    if (listTraining.get(j).getId() == temp2.getInt("id_pelatihan")) {
+                                                        listTraining.get(j).setStatus(temp2.getInt("status"));
+                                                    }
+                                                }
+                                            }
+                                            trainingAdapter.notifyDataSetChanged();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        error.printStackTrace();
+                                    }
+                                }
+                        );
+
+                        myQueue.add(request);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
                     }
                 }
         );

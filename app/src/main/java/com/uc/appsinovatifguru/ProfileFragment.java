@@ -16,10 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileFragment extends Fragment {
 
@@ -72,7 +70,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 mAuth.signOut();
                 getContext().getSharedPreferences(GlobalValue.historyId, 0).edit().clear().apply();
-                getContext().getSharedPreferences(GlobalValue.progressId, 0).edit().clear().apply();
+                getContext().getSharedPreferences(GlobalValue.progressHistoryId, 0).edit().clear().apply();
                 SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
                 sharedPreferencesEditor.putBoolean(GlobalValue.var1, false);
                 sharedPreferencesEditor.putBoolean(GlobalValue.var2, false);
@@ -81,9 +79,6 @@ public class ProfileFragment extends Fragment {
                 sharedPreferencesEditor.putBoolean(GlobalValue.var5, false);
                 sharedPreferencesEditor.putBoolean(GlobalValue.var6, false);
                 sharedPreferencesEditor.putBoolean(GlobalValue.var7, false);
-                sharedPreferencesEditor.putBoolean(GlobalValue.pretest, false);
-                sharedPreferencesEditor.putBoolean(GlobalValue.posttest, false);
-                sharedPreferencesEditor.putBoolean(GlobalValue.eval, false);
                 sharedPreferencesEditor.apply();
                 getActivity().finish();
                 startActivity(new Intent(getContext(), BeginlogoActivity.class));

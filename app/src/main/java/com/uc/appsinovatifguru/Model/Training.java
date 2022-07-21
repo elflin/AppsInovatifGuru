@@ -1,26 +1,22 @@
 package com.uc.appsinovatifguru.Model;
 
 public class Training {
-    private String judul;
-    private String downloadPdf;
-    private String video;
-    private String uploadPdf;
-    private String templateWord;
-    private String profilPeneliti;
-    private boolean preTest;
-    private boolean postTest;
-    private boolean eval;
 
-    public Training() {
-        this.judul = null;
-        this.downloadPdf = null;
-        this.video = null;
-        this.uploadPdf = null;
-        this.templateWord = null;
-        this.profilPeneliti = null;
-        this.preTest = false;
-        this.postTest = false;
-        this.eval = false;
+    private Integer id;
+    private String judul;
+    private String deskripsi;
+    private String link;
+    private String type;
+    private int status;
+    private String createdAt;
+    private String updatedAt;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getJudul() {
@@ -31,67 +27,51 @@ public class Training {
         this.judul = judul;
     }
 
-    public String getDownloadPdf() {
-        return downloadPdf;
+    public String getDeskripsi() {
+        return deskripsi;
     }
 
-    public void setDownloadPdf(String downloadPdf) {
-        this.downloadPdf = downloadPdf;
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
     }
 
-    public String getVideo() {
-        return video;
+    public String getLink() {
+        return link;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
+    public void setLink(String link) {
+        this.link = link;
     }
 
-    public String getUploadPdf() {
-        return uploadPdf;
+    public String getType() {
+        return type;
     }
 
-    public void setUploadPdf(String uploadPdf) {
-        this.uploadPdf = uploadPdf;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getTemplateWord() {
-        return templateWord;
+    public int getStatus() {
+        return status;
     }
 
-    public void setTemplateWord(String templateWord) {
-        this.templateWord = templateWord;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getProfilPeneliti() {
-        return profilPeneliti;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setProfilPeneliti(String profilPeneliti) {
-        this.profilPeneliti = profilPeneliti;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public boolean isPreTest() {
-        return preTest;
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setPreTest(boolean preTest) {
-        this.preTest = preTest;
-    }
-
-    public boolean isPostTest() {
-        return postTest;
-    }
-
-    public void setPostTest(boolean postTest) {
-        this.postTest = postTest;
-    }
-
-    public boolean isEval() {
-        return eval;
-    }
-
-    public void setEval(boolean eval) {
-        this.eval = eval;
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

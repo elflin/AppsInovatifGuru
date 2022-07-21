@@ -37,6 +37,7 @@ import java.util.ArrayList;
 
 public class EvalActivity extends AppCompatActivity implements EvalListener {
 
+    private int id;
     private TextView eval_title;
     private ImageButton eval_back;
     private RecyclerView eval_recyclerview;
@@ -81,6 +82,7 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
         eval_recyclerview.setLayoutManager(manager);
         eval_recyclerview.setAdapter(evalAdapter);
         eval_title.setText("Evaluasi");
+        id = getIntent().getIntExtra("id", -1);
     }
 
     @Override
@@ -128,9 +130,37 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
                     public void onResponse(JSONObject response) {
                         try {
                             if (response.getString("status").equalsIgnoreCase("200")){
-                                SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-                                sharedPreferencesEditor.putBoolean(GlobalValue.eval, true);
-                                sharedPreferencesEditor.apply();
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EvalActivity.this);
+                                int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
+
+                                String url = GlobalValue.serverURL+"createProgress";
+                                RequestQueue myQueue = Volley.newRequestQueue(EvalActivity.this);
+
+                                JSONObject parameter = new JSONObject();
+                                try {
+                                    parameter.put("id_progress_histories", progressHistoryId);
+                                    parameter.put("id_pelatihan", id);
+                                    parameter.put("status", true);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                                        new Response.Listener<JSONObject>() {
+                                            @Override
+                                            public void onResponse(JSONObject response) {
+
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                error.printStackTrace();
+                                            }
+                                        }
+                                );
+
+                                myQueue.add(request);
 
                                 finish();
                                 Toast.makeText(EvalActivity.this, "Eval successful", Toast.LENGTH_SHORT).show();

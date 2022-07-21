@@ -11,11 +11,8 @@ public class GlobalValue {
     public static final String var5 = "var5";
     public static final String var6 = "var6";
     public static final String var7 = "var7";
-    public static final String pretest = "pretest";
-    public static final String posttest = "posttest";
-    public static final String eval = "eval";
     public static final String historyId = "historyId";
-    public static final String progressId = "progressId";
+    public static final String progressHistoryId = "progressHistoryId";
 //    public static final String serverURL = "https://guru-inovatif.com/api/";
 //    public static final String serverURL = "http://192.168.18.8/Laravel/webinovatifguru/public/api/";
 //    public static final String serverURL = "http://10.62.48.35/Laravel/webinovatifguru/public/api/";

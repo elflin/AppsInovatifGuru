@@ -5,12 +5,14 @@
       <map>
         <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/drawable/upload_button_icon.xml" value="0.241" />
         <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/fragment_datasaya.xml" value="0.18229166666666666" />
+        <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/fragment_result.xml" value="0.18385416666666668" />
         <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_eval.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_result.xml" value="0.14266304347826086" />
         <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_trainingconsent.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_traininginformedconsent.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_trainingperkenalan.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_trainingpertemuan.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/itemrv_trainingtest.xml" value="0.33" />
         <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/drawable-mdpi/green_button.xml" value="0.298" />
         <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/drawable/red_button.xml" value="0.298" />
         <entry key="..\:/Users/japju/AndroidStudioProjects/AppsInovatifGuru/app/src/main/res/layout/activity_beginlogo.xml" value="0.35778985507246375" />
