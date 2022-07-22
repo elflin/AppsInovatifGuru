@@ -6,12 +6,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.preference.PreferenceManager;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,16 +26,35 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.util.IOUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.GsonBuilder;
 import com.uc.appsinovatifguru.Adapter.TrainingRecyclerViewAdapter;
+import com.uc.appsinovatifguru.Helpers.FileUploadService;
+import com.uc.appsinovatifguru.Helpers.ServiceGenerator;
+import com.uc.appsinovatifguru.Model.FileUpload;
 import com.uc.appsinovatifguru.Model.Training;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
 
 public class TrainingActivity extends AppCompatActivity {
     private ImageButton training_back;
@@ -263,6 +289,43 @@ public class TrainingActivity extends AppCompatActivity {
                 checkProgress();
                 trainingAdapter.notifyDataSetChanged();
             }
+        }
+
+        if (requestCode == 2) {
+            Log.d("adada", "aaa");
+            FileUploadService service =
+                    ServiceGenerator.createService(FileUploadService.class);
+            InputStream inputStream = null;
+            try {
+                inputStream = getContentResolver().openInputStream(data.getData());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            String encodedFile = "";
+            try {
+                encodedFile = Base64.encodeToString(IOUtils.toByteArray(inputStream), Base64.DEFAULT);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            service.uploadFile(encodedFile).enqueue(new Callback<FileUpload>() {
+                @Override
+                public void onResponse(Call<FileUpload> call, retrofit2.Response<FileUpload> response) {
+                    if (response.code() == 200) {
+                        Toast.makeText(TrainingActivity.this, "Upload file successful", Toast.LENGTH_SHORT).show();
+                        Log.d("APRKAWP", new GsonBuilder().setPrettyPrinting().create().toJson(response.body()));
+                    } else {
+                        Log.d("APRKAWP", response.errorBody().toString());
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<FileUpload> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
         }
     }
 
