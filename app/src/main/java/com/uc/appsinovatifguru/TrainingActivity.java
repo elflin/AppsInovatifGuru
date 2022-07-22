@@ -88,7 +88,7 @@ public class TrainingActivity extends AppCompatActivity {
         consent.setType("consent");
 
         Training yelyel = new Training();
-        yelyel.setJudul("yelyel");
+        yelyel.setJudul("Yel-Yel");
         yelyel.setType("materi");
         yelyel.setLink("https://youtu.be/iaicuH7q248");
 
@@ -114,7 +114,6 @@ public class TrainingActivity extends AppCompatActivity {
                                 temp3.setDeskripsi(temp2.getString("deskripsi"));
                                 temp3.setLink(temp2.getString("link"));
                                 temp3.setType(temp2.getString("type"));
-//                                temp3.setStatus(temp2.getInt("status"));
                                 listTraining.add(temp3);
                             }
                             trainingAdapter.notifyDataSetChanged();

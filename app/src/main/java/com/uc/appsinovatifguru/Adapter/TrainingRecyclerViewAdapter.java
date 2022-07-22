@@ -79,7 +79,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             if (!listTraining.get(position).getJudul().equals("Pertemuan 1: Pengantar")) {
                 holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.VISIBLE);
             }
-            if (listTraining.get(position).getJudul().equals("yelyel")) {
+            if (listTraining.get(position).getJudul().equals("Yel-Yel")) {
                 holder.itemTrainingPertemuanDeskripsiTextView.setVisibility(View.GONE);
                 holder.itemTrainingPertemuanDownloadPdf.setVisibility(View.GONE);
                 holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.GONE);
