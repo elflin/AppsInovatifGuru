@@ -140,6 +140,7 @@ public class TrainingActivity extends AppCompatActivity {
                                 temp3.setDeskripsi(temp2.getString("deskripsi"));
                                 temp3.setLink(temp2.getString("link"));
                                 temp3.setType(temp2.getString("type"));
+                                temp3.setLink_ppt(temp2.getString("link_ppt"));
                                 listTraining.add(temp3);
                             }
                             trainingAdapter.notifyDataSetChanged();
