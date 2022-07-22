@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 
 public class EvalActivity extends AppCompatActivity implements EvalListener {
 
+    private int id;
     private TextView eval_title;
     private ImageButton eval_back;
     private RecyclerView eval_recyclerview;
@@ -55,6 +57,8 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
         eval_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });
@@ -80,6 +84,7 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
         eval_recyclerview.setLayoutManager(manager);
         eval_recyclerview.setAdapter(evalAdapter);
         eval_title.setText("Evaluasi");
+        id = getIntent().getIntExtra("id", -1);
     }
 
     @Override
@@ -107,16 +112,17 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
 
     @Override
     public void OnSelesai(String pesan_kesan) {
-        String url = GlobalValue.serverURL+"insertEvaluasiJawaban";
-        RequestQueue myQueue = Volley.newRequestQueue(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EvalActivity.this);
+        int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
+
+        String url = GlobalValue.serverURL+"createProgress";
+        RequestQueue myQueue = Volley.newRequestQueue(EvalActivity.this);
 
         JSONObject parameter = new JSONObject();
         try {
-            parameter.put("id_progress", 1);
-            for (int i = 0; i< listPertanyaan.size(); i++){
-                parameter.put("jawaban" + (i + 1), listPertanyaan.get(i).getJawaban());
-            }
-            parameter.put("pesan_kesan", pesan_kesan);
+            parameter.put("id_progress_histories", progressHistoryId);
+            parameter.put("id_pelatihan", id);
+            parameter.put("status", true);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -125,19 +131,43 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            if (response.getString("status").equalsIgnoreCase("200")){
-                                SharedPreferences.Editor sharedPreferencesEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-                                sharedPreferencesEditor.putBoolean(GlobalValue.eval, true);
 
-                                sharedPreferencesEditor.apply();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
+                        String url = GlobalValue.serverURL+"insertEvaluasiJawaban";
+                        RequestQueue myQueue = Volley.newRequestQueue(EvalActivity.this);
+
+                        JSONObject parameter = new JSONObject();
+                        try {
+                            parameter.put("id_progress", response.getInt("id"));
+                            for (int i = 0; i< listPertanyaan.size(); i++){
+                                parameter.put("jawaban" + (i + 1), listPertanyaan.get(i).getJawaban());
                             }
+                            parameter.put("pesan_kesan", pesan_kesan);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        try {
+                                            if (response.getString("status").equalsIgnoreCase("200")){
+                                                finish();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        error.printStackTrace();
+                                    }
+                                }
+                        );
+
+                        myQueue.add(request);
                     }
                 },
                 new Response.ErrorListener() {

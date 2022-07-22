@@ -11,6 +11,7 @@ public class Test {
     private String jawabanD;
     private String jawabanE;
     private String kunci;
+    private String jawaban;
 
     public Integer getId() {
         return id;
@@ -74,5 +75,13 @@ public class Test {
 
     public void setKunci(String kunci) {
         this.kunci = kunci;
+    }
+
+    public String getJawaban() {
+        return jawaban;
+    }
+
+    public void setJawaban(String jawaban) {
+        this.jawaban = jawaban;
     }
 }

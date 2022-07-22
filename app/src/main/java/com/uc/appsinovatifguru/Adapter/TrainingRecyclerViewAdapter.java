@@ -2,30 +2,26 @@ package com.uc.appsinovatifguru.Adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.provider.DocumentsContract;
-import android.util.Log;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uc.appsinovatifguru.EvalActivity;
-import com.uc.appsinovatifguru.MainActivity;
 import com.uc.appsinovatifguru.Model.Training;
-import com.uc.appsinovatifguru.QuizActivity;
 import com.uc.appsinovatifguru.R;
 import com.uc.appsinovatifguru.TestActivity;
-import com.uc.appsinovatifguru.TrainingActivity;
 
 import java.util.ArrayList;
 
@@ -60,34 +56,35 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
     public void onBindViewHolder(@NonNull EvalRecyclerViewHolder holder, int position) {
         if (holder.getItemViewType() == R.layout.itemrv_trainingperkenalan) {
             holder.itemTrainingPerkenalanJudulTextView.setText(listTraining.get(position).getJudul());
-            if (listTraining.get(position).getProfilPeneliti() != null) {
-                holder.itemTrainingPerkenalanProfilTextView.setText(listTraining.get(position).getProfilPeneliti());
-            } else {
-                holder.itemTrainingPerkenalanProfilTextView.setText(listTraining.get(position).getTemplateWord());
-            }
         } else if (holder.getItemViewType() == R.layout.itemrv_trainingconsent) {
-            holder.itemTrainingConsentUploadPdfButton.setOnClickListener(new View.OnClickListener() {
+            holder.itemTrainingConsentFormLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("application/pdf");
-
-                    ((Activity) view.getContext()).startActivityForResult(intent, 2);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/forms/about/"));
+                    view.getContext().startActivity(intent);
                 }
             });
         } else if (holder.getItemViewType() == R.layout.itemrv_trainingpertemuan) {
             holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.GONE);
             holder.itemTrainingPertemuanJudulTextView.setText(listTraining.get(position).getJudul());
-//            holder.itemTrainingPertemuanDownloadPdfButton.setText(listTraining.get(position).getDownloadPdf());
-            if (listTraining.get(position).getUploadPdf() != null) {
+            holder.itemTrainingPertemuanDeskripsiTextView.setText(listTraining.get(position).getDeskripsi());
+            holder.itemTrainingPertemuanDownloadPdf.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(listTraining.get(holder.getAdapterPosition()).getLink_ppt()));
+                    view.getContext().startActivity(intent);
+                }
+            });
+
+            if (!listTraining.get(position).getJudul().equals("Pertemuan 1: Pengantar")) {
                 holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.VISIBLE);
-                holder.itemTrainingPertemuanUploadPdfButton.setText(listTraining.get(position).getUploadPdf());
             }
 
             holder.itemTrainingPertemuanWebView.getSettings().setJavaScriptEnabled(true);
             holder.itemTrainingPertemuanWebView.setWebChromeClient(new WebChromeClient());
-            String embed = "<iframe width=\"100%\" height=\"100%\" src=\"" + listTraining.get(position).getVideo() + "\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+            String link = listTraining.get(position).getLink();
+            String embedLink = "https://www.youtube.com/embed/" + link.substring(link.lastIndexOf("/"));
+            String embed = "<iframe width=\"100%\" height=\"100%\" src=\"" + embedLink + "\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
             holder.itemTrainingPertemuanWebView.loadData(embed, "text/html", "utf-8");
 
             holder.itemTrainingPertemuanUploadPdfButton.setOnClickListener(new View.OnClickListener() {
@@ -102,20 +99,44 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             });
         } else {
             holder.itemTrainingTestJudulTextView.setText(listTraining.get(position).getJudul());
+            holder.itemTrainingTestDeskripsiTextView.setText(listTraining.get(position).getDeskripsi());
             String buttonText = "Kerjakan " + listTraining.get(position).getJudul();
             holder.itemTrainingTestEvaluasiButton.setText(buttonText);
+
+            int maxAttempt = listTraining.get(position).getJudul().equals("Evaluasi Pelatihan") ? 1 : 2;
+            String done = String.format("Anda telah mengerjakan bagian ini sebanyak %s kali\n(maksimal pengerjaan: %s kali)",
+                    listTraining.get(position).getAttempts(),
+                    maxAttempt
+            );
+            holder.itemTrainingTestDoneTextView.setText(done);
+            if (listTraining.get(position).getAttempts() != 0) {
+                if (listTraining.get(position).getAttempts() == maxAttempt) {
+                    holder.itemTrainingTestEvaluasiButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
+                    holder.itemTrainingTestEvaluasiButton.setEnabled(false);
+                }
+            } else {
+                holder.itemTrainingTestEvaluasiButton.getBackground().clearColorFilter();
+                holder.itemTrainingTestEvaluasiButton.setEnabled(true);
+            }
 
             holder.itemTrainingTestEvaluasiButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (listTraining.get(holder.getAdapterPosition()).isEval()) {
-                        Intent intent1 = new Intent(view.getContext(), EvalActivity.class);
-                        intent1.putExtra("variabel", "Intensi Berinovasi");
-                        view.getContext().startActivity(intent1);
+                    if (listTraining.get(holder.getAdapterPosition()).getJudul().equals("Evaluasi Pelatihan")) {
+                        Intent intent = new Intent(view.getContext(), EvalActivity.class);
+                        intent.putExtra("id", listTraining.get(holder.getAdapterPosition()).getId());
+                        Activity origin = (Activity) view.getContext();
+                        origin.startActivityForResult(intent, 1);
                     } else {
-                        Intent intent1 = new Intent(view.getContext(), TestActivity.class);
-                        intent1.putExtra("variabel", "Intensi Berinovasi");
-                        view.getContext().startActivity(intent1);
+                        Intent intent = new Intent(view.getContext(), TestActivity.class);
+                        intent.putExtra("id", listTraining.get(holder.getAdapterPosition()).getId());
+                        if (listTraining.get(holder.getAdapterPosition()).getJudul().equals("Pre-test Learning")) {
+                            intent.putExtra("tipe", "pretest");
+                        } else {
+                            intent.putExtra("tipe", "posttest");
+                        }
+                        Activity origin = (Activity) view.getContext();
+                        origin.startActivityForResult(intent, 1);
                     }
                 }
             });
@@ -131,14 +152,19 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
     public int getItemViewType(int position) {
         int id;
 
-        if (listTraining.get(position).getProfilPeneliti() != null) {
-            id = R.layout.itemrv_trainingperkenalan;
-        } else if (listTraining.get(position).getTemplateWord() != null) {
-            id = R.layout.itemrv_trainingconsent;
-        } else if (listTraining.get(position).getDownloadPdf() != null) {
-            id = R.layout.itemrv_trainingpertemuan;
-        } else {
-            id = R.layout.itemrv_trainingtest;
+        switch (listTraining.get(position).getType()) {
+            case "perkenalan":
+                id = R.layout.itemrv_trainingperkenalan;
+                break;
+            case "consent":
+                id = R.layout.itemrv_trainingconsent;
+                break;
+            case "materi":
+                id = R.layout.itemrv_trainingpertemuan;
+                break;
+            default:
+                id = R.layout.itemrv_trainingtest;
+                break;
         }
 
         return id;
@@ -148,14 +174,17 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
         private TextView itemTrainingPerkenalanJudulTextView;
         private TextView itemTrainingPerkenalanProfilTextView;
 
-        private Button itemTrainingConsentUploadPdfButton;
+        private ConstraintLayout itemTrainingConsentFormLink;
 
         private TextView itemTrainingPertemuanJudulTextView;
-        private Button itemTrainingPertemuanDownloadPdfButton;
+        private TextView itemTrainingPertemuanDeskripsiTextView;
+        private ConstraintLayout itemTrainingPertemuanDownloadPdf;
         private Button itemTrainingPertemuanUploadPdfButton;
         WebView itemTrainingPertemuanWebView;
 
         private TextView itemTrainingTestJudulTextView;
+        private TextView itemTrainingTestDeskripsiTextView;
+        private TextView itemTrainingTestDoneTextView;
         private Button itemTrainingTestEvaluasiButton;
 
 
@@ -164,14 +193,17 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             itemTrainingPerkenalanJudulTextView = itemView.findViewById(R.id.itemTrainingPerkenalanJudulTextView);
             itemTrainingPerkenalanProfilTextView = itemView.findViewById(R.id.itemTrainingPerkenalanProfilTextView);
 
-            itemTrainingConsentUploadPdfButton = itemView.findViewById(R.id.itemTrainingConsentUploadPdfButton);
+            itemTrainingConsentFormLink = itemView.findViewById(R.id.itemTrainingConsentFormLink);
 
             itemTrainingPertemuanJudulTextView = itemView.findViewById(R.id.itemTrainingPertemuanJudulTextView);
-//            itemTrainingPertemuanDownloadPdfButton = itemView.findViewById(R.id.itemTrainingPertemuanDownloadPdfButton);
+            itemTrainingPertemuanDeskripsiTextView = itemView.findViewById(R.id.itemTrainingPertemuanDeskripsiTextView);
+            itemTrainingPertemuanDownloadPdf = itemView.findViewById(R.id.itemTrainingPertemuanDownloadPdf);
             itemTrainingPertemuanUploadPdfButton = itemView.findViewById(R.id.itemTrainingPertemuanUploadPdfButton);
             itemTrainingPertemuanWebView = itemView.findViewById(R.id.itemTrainingPertemuanWebView);
 
             itemTrainingTestJudulTextView = itemView.findViewById(R.id.itemTrainingTestJudulTextView);
+            itemTrainingTestDeskripsiTextView = itemView.findViewById(R.id.itemTrainingTestDeskripsiTextView);
+            itemTrainingTestDoneTextView = itemView.findViewById(R.id.itemTrainingTestDoneTextView);
             itemTrainingTestEvaluasiButton = itemView.findViewById(R.id.itemTrainingTestEvaluasiButton);
         }
     }

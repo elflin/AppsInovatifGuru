@@ -11,12 +11,12 @@ public class GlobalValue {
     public static final String var5 = "var5";
     public static final String var6 = "var6";
     public static final String var7 = "var7";
-    public static final String eval = "eval";
     public static final String historyId = "historyId";
+    public static final String progressHistoryId = "progressHistoryId";
 //    public static final String serverURL = "https://guru-inovatif.com/api/";
 //    public static final String serverURL = "http://192.168.18.8/Laravel/webinovatifguru/public/api/";
 //    public static final String serverURL = "http://10.62.48.35/Laravel/webinovatifguru/public/api/";
-    public static final String serverURL = "http://192.168.213.176/webinovatifguru/public/api/";
+    public static final String serverURL = "http://192.168.1.7/webinovatifguru/public/api/";
 
     public static boolean ValidateEmail(String email){
         Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile("[a-zA-Z0-9+._%-+]{1,256}" + "@"

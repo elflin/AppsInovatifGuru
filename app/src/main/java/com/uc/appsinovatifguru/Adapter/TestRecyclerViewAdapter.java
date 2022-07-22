@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uc.appsinovatifguru.Listener.SoalListener;
+import com.uc.appsinovatifguru.Listener.TestListener;
 import com.uc.appsinovatifguru.Model.Test;
 import com.uc.appsinovatifguru.R;
 
@@ -19,14 +20,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerViewAdapter.EvalRecyclerViewHolder>{
-
     private ArrayList<Test> listTest;
-    private SoalListener soalListener;
+    private TestListener testListener;
+    ArrayList<String> shuffleJawaban;
 
-
-    public TestRecyclerViewAdapter(ArrayList<Test> listTest, SoalListener soalListener){
+    public TestRecyclerViewAdapter(ArrayList<Test> listTest, TestListener testListener){
         this.listTest = listTest;
-        this.soalListener = soalListener;
+        this.testListener = testListener;
     }
 
     @NonNull
@@ -46,7 +46,7 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
         }else{
             holder.itemsoal_selesai.setVisibility(View.GONE);
         }
-        ArrayList<String> shuffleJawaban = new ArrayList<>();
+        shuffleJawaban = new ArrayList<>();
         shuffleJawaban.add(listTest.get(position).getJawabanA());
         shuffleJawaban.add(listTest.get(position).getJawabanB());
         shuffleJawaban.add(listTest.get(position).getJawabanC());
@@ -95,23 +95,23 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
                     switch(checkedId){
                         case R.id.radio_button_1:
                             // do operations specific to this selection
-                            soalListener.OnRadioClicked(getAdapterPosition(), 1);
+                            testListener.OnRadioClicked(getAdapterPosition(), shuffleJawaban.get(0));
                             break;
                         case R.id.radio_button_2:
                             // do operations specific to this selection
-                            soalListener.OnRadioClicked(getAdapterPosition(), 2);
+                            testListener.OnRadioClicked(getAdapterPosition(), shuffleJawaban.get(1));
                             break;
                         case R.id.radio_button_3:
                             // do operations specific to this selection
-                            soalListener.OnRadioClicked(getAdapterPosition(), 3);
+                            testListener.OnRadioClicked(getAdapterPosition(), shuffleJawaban.get(2));
                             break;
                         case R.id.radio_button_4:
                             // do operations specific to this selection
-                            soalListener.OnRadioClicked(getAdapterPosition(), 4);
+                            testListener.OnRadioClicked(getAdapterPosition(), shuffleJawaban.get(3));
                             break;
                         case R.id.radio_button_5:
                             // do operations specific to this selection
-                            soalListener.OnRadioClicked(getAdapterPosition(), 5);
+                            testListener.OnRadioClicked(getAdapterPosition(), shuffleJawaban.get(4));
                             break;
                     }
                 }
@@ -120,7 +120,7 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
             itemsoal_selesai.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    soalListener.OnSelesai();
+                    testListener.OnSelesai();
                 }
             });
         }
