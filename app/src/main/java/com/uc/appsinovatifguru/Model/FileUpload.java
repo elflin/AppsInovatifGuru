@@ -3,7 +3,7 @@ package com.uc.appsinovatifguru.Model;
 public class FileUpload {
 
     private Integer status;
-    private String linkPath;
+    private String link_path;
 
     public Integer getStatus() {
         return status;
@@ -13,11 +13,11 @@ public class FileUpload {
         this.status = status;
     }
 
-    public String getLinkPath() {
-        return linkPath;
+    public String getLink_path() {
+        return link_path;
     }
 
-    public void setLinkPath(String linkPath) {
-        this.linkPath = linkPath;
+    public void setLink_path(String link_path) {
+        this.link_path = link_path;
     }
 }

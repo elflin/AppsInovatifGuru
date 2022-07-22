@@ -292,21 +292,15 @@ public class TrainingActivity extends AppCompatActivity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            File file = new File(data.getData().getPath());
 
-            RequestBody requestFile = null;
+            String encodedFile = "";
             try {
-                String encodedFile = Base64.encodeToString(IOUtils.toByteArray(inputStream), Base64.DEFAULT);
-                requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), encodedFile);
-                Log.d("APRKAWP", encodedFile);
+                encodedFile = Base64.encodeToString(IOUtils.toByteArray(inputStream), Base64.DEFAULT);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            MultipartBody.Part body =
-                    MultipartBody.Part.createFormData("file", data.getData().getPath(), requestFile);
-
-            service.uploadFile(body).enqueue(new Callback<FileUpload>() {
+            service.uploadFile(encodedFile).enqueue(new Callback<FileUpload>() {
                 @Override
                 public void onResponse(Call<FileUpload> call, retrofit2.Response<FileUpload> response) {
                     if (response.code() == 200) {
@@ -324,36 +318,5 @@ public class TrainingActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    public  String getPath(Context context, Uri uri) throws URISyntaxException {
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { "_data" };
-            Cursor cursor = null;
-            try {
-                cursor = context.getContentResolver().query(uri, projection, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow("_data");
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(column_index);
-                }
-            } catch (Exception e) {
-                // Eat it
-            }
-        }
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
-    }
-
-    public String getFileExtension(String filePath){
-        String extension = "";
-        try{
-            extension = filePath.substring(filePath.lastIndexOf("."));
-        }catch(Exception exception){
-            Log.e("Err", exception.toString()+"");
-        }
-        return  extension;
     }
 }
