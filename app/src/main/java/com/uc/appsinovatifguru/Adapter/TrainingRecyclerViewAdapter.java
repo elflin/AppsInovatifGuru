@@ -92,7 +92,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("application/pdf");
+                    intent.setType("application/*");
 
                     ((Activity) view.getContext()).startActivityForResult(intent, 2);
                 }

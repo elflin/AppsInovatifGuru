@@ -6,11 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -25,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.util.IOUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.GsonBuilder;
 import com.uc.appsinovatifguru.Adapter.TrainingRecyclerViewAdapter;
 import com.uc.appsinovatifguru.Helpers.FileUploadService;
 import com.uc.appsinovatifguru.Helpers.ServiceGenerator;
@@ -39,6 +44,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import okhttp3.MediaType;
@@ -286,10 +292,13 @@ public class TrainingActivity extends AppCompatActivity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            RequestBody requestFile =
-                    null;
+            File file = new File(data.getData().getPath());
+
+            RequestBody requestFile = null;
             try {
-                requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), IOUtils.toByteArray(inputStream));
+                String encodedFile = Base64.encodeToString(IOUtils.toByteArray(inputStream), Base64.DEFAULT);
+                requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), encodedFile);
+                Log.d("APRKAWP", encodedFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -300,9 +309,13 @@ public class TrainingActivity extends AppCompatActivity {
             service.uploadFile(body).enqueue(new Callback<FileUpload>() {
                 @Override
                 public void onResponse(Call<FileUpload> call, retrofit2.Response<FileUpload> response) {
-                    if (response.body().getStatus() == 200) {
+                    if (response.code() == 200) {
                         Toast.makeText(TrainingActivity.this, "Upload file successful", Toast.LENGTH_SHORT).show();
+                        Log.d("APRKAWP", new GsonBuilder().setPrettyPrinting().create().toJson(response.body()));
+                    } else {
+                        Log.d("APRKAWP", response.errorBody().toString());
                     }
+
                 }
 
                 @Override
@@ -311,5 +324,36 @@ public class TrainingActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public  String getPath(Context context, Uri uri) throws URISyntaxException {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = { "_data" };
+            Cursor cursor = null;
+            try {
+                cursor = context.getContentResolver().query(uri, projection, null, null, null);
+                int column_index = cursor.getColumnIndexOrThrow("_data");
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(column_index);
+                }
+            } catch (Exception e) {
+                // Eat it
+            }
+        }
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+    public String getFileExtension(String filePath){
+        String extension = "";
+        try{
+            extension = filePath.substring(filePath.lastIndexOf("."));
+        }catch(Exception exception){
+            Log.e("Err", exception.toString()+"");
+        }
+        return  extension;
     }
 }
