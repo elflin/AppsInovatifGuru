@@ -11,8 +11,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,11 +22,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.util.IOUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.uc.appsinovatifguru.Adapter.TrainingRecyclerViewAdapter;
 import com.uc.appsinovatifguru.Helpers.FileUploadService;
 import com.uc.appsinovatifguru.Helpers.ServiceGenerator;
+import com.uc.appsinovatifguru.Model.FileUpload;
 import com.uc.appsinovatifguru.Model.Training;
 
 import org.json.JSONArray;
@@ -32,6 +36,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import okhttp3.MediaType;
@@ -270,18 +277,39 @@ public class TrainingActivity extends AppCompatActivity {
         }
 
         if (requestCode == 2) {
-            System.out.println("test");
+            Log.d("adada", "aaa");
             FileUploadService service =
                     ServiceGenerator.createService(FileUploadService.class);
-
-            File file = new File(data.getData().getPath());
+            InputStream inputStream = null;
+            try {
+                inputStream = getContentResolver().openInputStream(data.getData());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             RequestBody requestFile =
-                    RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                    null;
+            try {
+                requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), IOUtils.toByteArray(inputStream));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             MultipartBody.Part body =
-                    MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+                    MultipartBody.Part.createFormData("file", data.getData().getPath(), requestFile);
 
-            service.uploadFile(body);
+            service.uploadFile(body).enqueue(new Callback<FileUpload>() {
+                @Override
+                public void onResponse(Call<FileUpload> call, retrofit2.Response<FileUpload> response) {
+                    if (response.body().getStatus() == 200) {
+                        Toast.makeText(TrainingActivity.this, "Upload file successful", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FileUpload> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
         }
     }
 }
