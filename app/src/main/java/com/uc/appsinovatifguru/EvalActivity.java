@@ -92,19 +92,19 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
         String jawaban  = "";
         switch (nilai) {
             case 1:
-                jawaban = "Sangat setuju";
+                jawaban = "SS";
                 break;
             case 2:
-                jawaban = "Setuju";
+                jawaban = "S";
                 break;
             case 3:
-                jawaban = "Cukup";
+                jawaban = "R";
                 break;
             case 4:
-                jawaban = "Tidak setuju";
+                jawaban = "TS";
                 break;
             case 5:
-                jawaban = "Sangat tidak setuju";
+                jawaban = "STS";
                 break;
         }
         listPertanyaan.get(position).setJawaban(jawaban);

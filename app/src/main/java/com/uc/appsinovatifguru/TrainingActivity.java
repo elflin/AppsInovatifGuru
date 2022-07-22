@@ -87,8 +87,14 @@ public class TrainingActivity extends AppCompatActivity {
         consent.setJudul("Informed Consent");
         consent.setType("consent");
 
+        Training yelyel = new Training();
+        yelyel.setJudul("yelyel");
+        yelyel.setType("materi");
+        yelyel.setLink("https://youtu.be/iaicuH7q248");
+
         listTraining.add(perkenalan);
         listTraining.add(consent);
+        listTraining.add(yelyel);
 
         String url = GlobalValue.serverURL+"pelatihans";
         RequestQueue myQueue = Volley.newRequestQueue(this);
@@ -226,6 +232,10 @@ public class TrainingActivity extends AppCompatActivity {
                                     JSONObject temp2 = temp1.getJSONObject(j);
                                     if (listTraining.get(i).getId() == temp2.getInt("id_pelatihan")) {
                                         listTraining.get(i).setAttempts(listTraining.get(i).getAttempts() + 1);
+
+                                        if (listTraining.get(i).getJudul().equals("Evaluasi Pelatihan")) {
+                                            checkNilaiEval(temp2.getInt("id"));
+                                        }
                                     }
                                 }
                             }
@@ -255,5 +265,44 @@ public class TrainingActivity extends AppCompatActivity {
                 trainingAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    private void checkNilaiEval(int id) {
+        String url = GlobalValue.serverURL+"resultEvaluasiJawaban";
+        RequestQueue myQueue = Volley.newRequestQueue(this);
+
+        JSONObject parameter = new JSONObject();
+        try {
+            parameter.put("id_progress", id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            for (Training training : listTraining) {
+                                if (training.getJudul().equals("Evaluasi Pelatihan")) {
+                                    training.setResult(response.getInt("result"));
+                                    break;
+                                }
+                            }
+                            trainingAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        );
+
+        myQueue.add(request);
     }
 }

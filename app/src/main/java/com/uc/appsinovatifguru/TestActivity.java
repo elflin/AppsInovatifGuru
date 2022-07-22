@@ -56,7 +56,7 @@ public class TestActivity extends AppCompatActivity implements TestListener {
                 Toast.makeText(TestActivity.this, "Maaf, waktu pengerjaan anda telah melebihi 10 menit.", Toast.LENGTH_SHORT).show();
                 finish();
             }
-        }, 10000);
+        }, 600000);
     }
 
     private void setListener() {

@@ -9,6 +9,7 @@ public class Training {
     private String type;
     private String link_ppt = "https://www.google.com/";
     private int attempts = 0;
+    private int result = -1;
     private String createdAt;
     private String updatedAt;
 
@@ -66,6 +67,14 @@ public class Training {
 
     public void setAttempts(int attempts) {
         this.attempts = attempts;
+    }
+
+    public int getResult() {
+        return result;
+    }
+
+    public void setResult(int result) {
+        this.result = result;
     }
 
     public String getCreatedAt() {
