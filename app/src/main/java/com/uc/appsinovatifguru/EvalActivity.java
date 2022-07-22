@@ -112,6 +112,17 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
 
     @Override
     public void OnSelesai(String pesan_kesan) {
+        boolean allJawabanFilled = true;
+        for (Eval eval : listPertanyaan) {
+            if (eval.getJawaban() == null) {
+                allJawabanFilled = false;
+            }
+        }
+        Log.d("ISIaaaa", pesan_kesan);
+        if (!allJawabanFilled || pesan_kesan.equals("")) {
+            Toast.makeText(this, "Anda belum mengisi semua jawaban serta pesan dan kesan", Toast.LENGTH_SHORT).show();
+            return;
+        }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EvalActivity.this);
         int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
 
