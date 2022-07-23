@@ -14,5 +14,8 @@ import retrofit2.http.Part;
 public interface FileUploadService {
     @POST("uploadFile")
     @FormUrlEncoded
-    Call<FileUpload> uploadFile(@Field("file") String base64);
+    Call<FileUpload> uploadFile(
+            @Field("file") String base64,
+            @Field("type") String type
+    );
 }

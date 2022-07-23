@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.preference.PreferenceManager;
+import android.provider.OpenableColumns;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -296,7 +297,6 @@ public class TrainingActivity extends AppCompatActivity {
         if (requestCode >= 2) {
             int id_pelatihan = requestCode - 1;
             if(resultCode == Activity.RESULT_OK){
-                Log.d("id_pelatihan", String.valueOf(id_pelatihan));
                 FileUploadService service =
                         ServiceGenerator.createService(FileUploadService.class);
                 InputStream inputStream = null;
@@ -306,14 +306,20 @@ public class TrainingActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                String encodedFile = "";
+                byte[] file = null;
                 try {
-                    encodedFile = Base64.encodeToString(IOUtils.toByteArray(inputStream), Base64.DEFAULT);
+                    file = IOUtils.toByteArray(inputStream);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                if (file.length > 4096000) {
+                    Toast.makeText(this, "Ukuran file terlalu besar (Max: 4 MB)", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                service.uploadFile(encodedFile).enqueue(new Callback<FileUpload>() {
+                String encodedFile = Base64.encodeToString(file, Base64.DEFAULT);
+
+                service.uploadFile(encodedFile, getFileName(data.getData())).enqueue(new Callback<FileUpload>() {
                     @Override
                     public void onResponse(Call<FileUpload> call, retrofit2.Response<FileUpload> response) {
                         if (response.code() == 200) {
@@ -407,5 +413,28 @@ public class TrainingActivity extends AppCompatActivity {
         );
 
         myQueue.add(request);
+    }
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        result = result.substring(result.lastIndexOf(".") + 1);
+        return result;
     }
 }
