@@ -118,7 +118,6 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
                 allJawabanFilled = false;
             }
         }
-        Log.d("ISIaaaa", pesan_kesan);
         if (!allJawabanFilled || pesan_kesan.equals("")) {
             Toast.makeText(this, "Anda belum mengisi semua jawaban serta pesan dan kesan", Toast.LENGTH_SHORT).show();
             return;
