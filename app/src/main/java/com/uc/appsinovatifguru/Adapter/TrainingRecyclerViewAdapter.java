@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
@@ -77,6 +78,11 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
                 }
             });
 
+            if (listTraining.get(position).getAttempts() != 0) {
+                holder.itemTrainingPertemuanDoneCardView.setVisibility(View.VISIBLE);
+            } else {
+                holder.itemTrainingPertemuanDoneCardView.setVisibility(View.GONE);
+            }
             if (!listTraining.get(position).getJudul().equals("Pertemuan 1: Pengantar")) {
                 holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.VISIBLE);
             }
@@ -100,7 +106,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
                     intent.setType("application/*");
 
-                    ((Activity) view.getContext()).startActivityForResult(intent, 2);
+                    ((Activity) view.getContext()).startActivityForResult(intent, 1 + listTraining.get(holder.getAdapterPosition()).getId());
                 }
             });
         } else {
@@ -194,7 +200,8 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
         private TextView itemTrainingPertemuanDeskripsiTextView;
         private ConstraintLayout itemTrainingPertemuanDownloadPdf;
         private Button itemTrainingPertemuanUploadPdfButton;
-        WebView itemTrainingPertemuanWebView;
+        private WebView itemTrainingPertemuanWebView;
+        private CardView itemTrainingPertemuanDoneCardView;
 
         private TextView itemTrainingTestJudulTextView;
         private TextView itemTrainingTestDeskripsiTextView;
@@ -216,6 +223,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             itemTrainingPertemuanDownloadPdf = itemView.findViewById(R.id.itemTrainingPertemuanDownloadPdf);
             itemTrainingPertemuanUploadPdfButton = itemView.findViewById(R.id.itemTrainingPertemuanUploadPdfButton);
             itemTrainingPertemuanWebView = itemView.findViewById(R.id.itemTrainingPertemuanWebView);
+            itemTrainingPertemuanDoneCardView = itemView.findViewById(R.id.itemTrainingPertemuanDoneCardView);
 
             itemTrainingTestJudulTextView = itemView.findViewById(R.id.itemTrainingTestJudulTextView);
             itemTrainingTestDeskripsiTextView = itemView.findViewById(R.id.itemTrainingTestDeskripsiTextView);
