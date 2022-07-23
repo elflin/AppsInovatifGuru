@@ -71,13 +71,19 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             holder.itemTrainingPertemuanDownloadPdf.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(listTraining.get(holder.getAdapterPosition()).getLink_ppt()));
+                    String url = "https://guru-inovatif.com/modul/" + listTraining.get(holder.getAdapterPosition()).getLink_ppt();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     view.getContext().startActivity(intent);
                 }
             });
 
             if (!listTraining.get(position).getJudul().equals("Pertemuan 1: Pengantar")) {
                 holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.VISIBLE);
+            }
+            if (listTraining.get(position).getJudul().equals("Yel-Yel")) {
+                holder.itemTrainingPertemuanDeskripsiTextView.setVisibility(View.GONE);
+                holder.itemTrainingPertemuanDownloadPdf.setVisibility(View.GONE);
+                holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.GONE);
             }
 
             holder.itemTrainingPertemuanWebView.getSettings().setJavaScriptEnabled(true);
@@ -92,7 +98,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("application/pdf");
+                    intent.setType("application/*");
 
                     ((Activity) view.getContext()).startActivityForResult(intent, 2);
                 }
@@ -113,6 +119,14 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
                 if (listTraining.get(position).getAttempts() == maxAttempt) {
                     holder.itemTrainingTestEvaluasiButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
                     holder.itemTrainingTestEvaluasiButton.setEnabled(false);
+                    if (listTraining.get(position).getResult() != -1) {
+                        holder.itemTrainingTestNilaiTextView.setText(String.valueOf(listTraining.get(position).getResult()));
+                        holder.itemTrainingTestNilaiAndaTextView.setVisibility(View.VISIBLE);
+                        holder.itemTrainingTestNilaiTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.itemTrainingTestNilaiAndaTextView.setVisibility(View.GONE);
+                        holder.itemTrainingTestNilaiTextView.setVisibility(View.GONE);
+                    }
                 }
             } else {
                 holder.itemTrainingTestEvaluasiButton.getBackground().clearColorFilter();
@@ -184,6 +198,8 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
 
         private TextView itemTrainingTestJudulTextView;
         private TextView itemTrainingTestDeskripsiTextView;
+        private TextView itemTrainingTestNilaiAndaTextView;
+        private TextView itemTrainingTestNilaiTextView;
         private TextView itemTrainingTestDoneTextView;
         private Button itemTrainingTestEvaluasiButton;
 
@@ -203,6 +219,8 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
 
             itemTrainingTestJudulTextView = itemView.findViewById(R.id.itemTrainingTestJudulTextView);
             itemTrainingTestDeskripsiTextView = itemView.findViewById(R.id.itemTrainingTestDeskripsiTextView);
+            itemTrainingTestNilaiAndaTextView = itemView.findViewById(R.id.itemTrainingTestNilaiAndaTextView);
+            itemTrainingTestNilaiTextView = itemView.findViewById(R.id.itemTrainingTestNilaiTextView);
             itemTrainingTestDoneTextView = itemView.findViewById(R.id.itemTrainingTestDoneTextView);
             itemTrainingTestEvaluasiButton = itemView.findViewById(R.id.itemTrainingTestEvaluasiButton);
         }

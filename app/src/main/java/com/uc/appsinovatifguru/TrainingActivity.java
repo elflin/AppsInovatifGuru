@@ -6,13 +6,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.preference.PreferenceManager;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,11 +26,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.util.IOUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.GsonBuilder;
 import com.uc.appsinovatifguru.Adapter.TrainingRecyclerViewAdapter;
 import com.uc.appsinovatifguru.Helpers.FileUploadService;
 import com.uc.appsinovatifguru.Helpers.ServiceGenerator;
+import com.uc.appsinovatifguru.Model.FileUpload;
 import com.uc.appsinovatifguru.Model.Training;
 
 import org.json.JSONArray;
@@ -32,6 +41,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import okhttp3.MediaType;
@@ -100,8 +113,14 @@ public class TrainingActivity extends AppCompatActivity {
         consent.setJudul("Informed Consent");
         consent.setType("consent");
 
+        Training yelyel = new Training();
+        yelyel.setJudul("Yel-Yel");
+        yelyel.setType("materi");
+        yelyel.setLink("https://youtu.be/iaicuH7q248");
+
         listTraining.add(perkenalan);
         listTraining.add(consent);
+        listTraining.add(yelyel);
 
         String url = GlobalValue.serverURL+"pelatihans";
         RequestQueue myQueue = Volley.newRequestQueue(this);
@@ -121,7 +140,7 @@ public class TrainingActivity extends AppCompatActivity {
                                 temp3.setDeskripsi(temp2.getString("deskripsi"));
                                 temp3.setLink(temp2.getString("link"));
                                 temp3.setType(temp2.getString("type"));
-//                                temp3.setStatus(temp2.getInt("status"));
+                                temp3.setLink_ppt(temp2.getString("link_ppt"));
                                 listTraining.add(temp3);
                             }
                             trainingAdapter.notifyDataSetChanged();
@@ -239,6 +258,10 @@ public class TrainingActivity extends AppCompatActivity {
                                     JSONObject temp2 = temp1.getJSONObject(j);
                                     if (listTraining.get(i).getId() == temp2.getInt("id_pelatihan")) {
                                         listTraining.get(i).setAttempts(listTraining.get(i).getAttempts() + 1);
+
+                                        if (listTraining.get(i).getJudul().equals("Evaluasi Pelatihan")) {
+                                            checkNilaiEval(temp2.getInt("id"));
+                                        }
                                     }
                                 }
                             }
@@ -270,18 +293,79 @@ public class TrainingActivity extends AppCompatActivity {
         }
 
         if (requestCode == 2) {
-            System.out.println("test");
+            Log.d("adada", "aaa");
             FileUploadService service =
                     ServiceGenerator.createService(FileUploadService.class);
+            InputStream inputStream = null;
+            try {
+                inputStream = getContentResolver().openInputStream(data.getData());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
-            File file = new File(data.getData().getPath());
-            RequestBody requestFile =
-                    RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            String encodedFile = "";
+            try {
+                encodedFile = Base64.encodeToString(IOUtils.toByteArray(inputStream), Base64.DEFAULT);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            MultipartBody.Part body =
-                    MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+            service.uploadFile(encodedFile).enqueue(new Callback<FileUpload>() {
+                @Override
+                public void onResponse(Call<FileUpload> call, retrofit2.Response<FileUpload> response) {
+                    if (response.code() == 200) {
+                        Toast.makeText(TrainingActivity.this, "Upload file successful", Toast.LENGTH_SHORT).show();
+                        Log.d("APRKAWP", new GsonBuilder().setPrettyPrinting().create().toJson(response.body()));
+                    } else {
+                        Log.d("APRKAWP", response.errorBody().toString());
+                    }
 
-            service.uploadFile(body);
+                }
+
+                @Override
+                public void onFailure(Call<FileUpload> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
         }
+    }
+
+    private void checkNilaiEval(int id) {
+        String url = GlobalValue.serverURL+"resultEvaluasiJawaban";
+        RequestQueue myQueue = Volley.newRequestQueue(this);
+
+        JSONObject parameter = new JSONObject();
+        try {
+            parameter.put("id_progress", id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            for (Training training : listTraining) {
+                                if (training.getJudul().equals("Evaluasi Pelatihan")) {
+                                    training.setResult(response.getInt("result"));
+                                    break;
+                                }
+                            }
+                            trainingAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        );
+
+        myQueue.add(request);
     }
 }

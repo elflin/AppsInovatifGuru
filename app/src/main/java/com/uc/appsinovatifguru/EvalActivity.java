@@ -92,19 +92,19 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
         String jawaban  = "";
         switch (nilai) {
             case 1:
-                jawaban = "Sangat setuju";
+                jawaban = "SS";
                 break;
             case 2:
-                jawaban = "Setuju";
+                jawaban = "S";
                 break;
             case 3:
-                jawaban = "Cukup";
+                jawaban = "R";
                 break;
             case 4:
-                jawaban = "Tidak setuju";
+                jawaban = "TS";
                 break;
             case 5:
-                jawaban = "Sangat tidak setuju";
+                jawaban = "STS";
                 break;
         }
         listPertanyaan.get(position).setJawaban(jawaban);
@@ -112,6 +112,17 @@ public class EvalActivity extends AppCompatActivity implements EvalListener {
 
     @Override
     public void OnSelesai(String pesan_kesan) {
+        boolean allJawabanFilled = true;
+        for (Eval eval : listPertanyaan) {
+            if (eval.getJawaban() == null) {
+                allJawabanFilled = false;
+            }
+        }
+        Log.d("ISIaaaa", pesan_kesan);
+        if (!allJawabanFilled || pesan_kesan.equals("")) {
+            Toast.makeText(this, "Anda belum mengisi semua jawaban serta pesan dan kesan", Toast.LENGTH_SHORT).show();
+            return;
+        }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EvalActivity.this);
         int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
 
