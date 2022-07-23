@@ -24,6 +24,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.uc.appsinovatifguru.Adapter.TestRecyclerViewAdapter;
 import com.uc.appsinovatifguru.Listener.TestListener;
+import com.uc.appsinovatifguru.Model.Eval;
 import com.uc.appsinovatifguru.Model.Test;
 
 import org.json.JSONArray;
@@ -134,6 +135,16 @@ public class TestActivity extends AppCompatActivity implements TestListener {
 
     @Override
     public void OnSelesai() {
+        boolean allJawabanFilled = true;
+        for (Test test : listSoal) {
+            if (test.getJawaban() == null) {
+                allJawabanFilled = false;
+            }
+        }
+        if (!allJawabanFilled) {
+            Toast.makeText(this, "Anda belum mengisi semua jawaban", Toast.LENGTH_SHORT).show();
+            return;
+        }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TestActivity.this);
         int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
 
@@ -182,6 +193,7 @@ public class TestActivity extends AppCompatActivity implements TestListener {
                                     public void onResponse(JSONObject response) {
                                         Intent returnIntent = new Intent();
                                         setResult(Activity.RESULT_OK, returnIntent);
+                                        Toast.makeText(TestActivity.this, "Jawaban anda berhasil disimpan", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
                                 },

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
@@ -77,6 +79,11 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
                 }
             });
 
+            if (listTraining.get(position).getAttempts() != 0) {
+                holder.itemTrainingPertemuanDoneCardView.setVisibility(View.VISIBLE);
+            } else {
+                holder.itemTrainingPertemuanDoneCardView.setVisibility(View.GONE);
+            }
             if (!listTraining.get(position).getJudul().equals("Pertemuan 1: Pengantar")) {
                 holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.VISIBLE);
             }
@@ -96,11 +103,16 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             holder.itemTrainingPertemuanUploadPdfButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String[] mimeTypes =
+                            {"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                    "application/pdf"};
+
                     Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("application/*");
+                    intent.setType("*/*");
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
 
-                    ((Activity) view.getContext()).startActivityForResult(intent, 2);
+                    ((Activity) view.getContext()).startActivityForResult(intent, 1 + listTraining.get(holder.getAdapterPosition()).getId());
                 }
             });
         } else {
@@ -194,7 +206,8 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
         private TextView itemTrainingPertemuanDeskripsiTextView;
         private ConstraintLayout itemTrainingPertemuanDownloadPdf;
         private Button itemTrainingPertemuanUploadPdfButton;
-        WebView itemTrainingPertemuanWebView;
+        private WebView itemTrainingPertemuanWebView;
+        private CardView itemTrainingPertemuanDoneCardView;
 
         private TextView itemTrainingTestJudulTextView;
         private TextView itemTrainingTestDeskripsiTextView;
@@ -216,6 +229,7 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
             itemTrainingPertemuanDownloadPdf = itemView.findViewById(R.id.itemTrainingPertemuanDownloadPdf);
             itemTrainingPertemuanUploadPdfButton = itemView.findViewById(R.id.itemTrainingPertemuanUploadPdfButton);
             itemTrainingPertemuanWebView = itemView.findViewById(R.id.itemTrainingPertemuanWebView);
+            itemTrainingPertemuanDoneCardView = itemView.findViewById(R.id.itemTrainingPertemuanDoneCardView);
 
             itemTrainingTestJudulTextView = itemView.findViewById(R.id.itemTrainingTestJudulTextView);
             itemTrainingTestDeskripsiTextView = itemView.findViewById(R.id.itemTrainingTestDeskripsiTextView);

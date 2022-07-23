@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.preference.PreferenceManager;
+import android.provider.OpenableColumns;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -45,6 +46,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import okhttp3.MediaType;
@@ -292,41 +294,50 @@ public class TrainingActivity extends AppCompatActivity {
             }
         }
 
-        if (requestCode == 2) {
-            Log.d("adada", "aaa");
-            FileUploadService service =
-                    ServiceGenerator.createService(FileUploadService.class);
-            InputStream inputStream = null;
-            try {
-                inputStream = getContentResolver().openInputStream(data.getData());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+        if (requestCode >= 2) {
+            int id_pelatihan = requestCode - 1;
+            if(resultCode == Activity.RESULT_OK){
+                FileUploadService service =
+                        ServiceGenerator.createService(FileUploadService.class);
+                InputStream inputStream = null;
+                try {
+                    inputStream = getContentResolver().openInputStream(data.getData());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
 
-            String encodedFile = "";
-            try {
-                encodedFile = Base64.encodeToString(IOUtils.toByteArray(inputStream), Base64.DEFAULT);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                byte[] file = null;
+                try {
+                    file = IOUtils.toByteArray(inputStream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (file.length > 4096000) {
+                    Toast.makeText(this, "Ukuran file terlalu besar (Max: 4 MB)", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-            service.uploadFile(encodedFile).enqueue(new Callback<FileUpload>() {
-                @Override
-                public void onResponse(Call<FileUpload> call, retrofit2.Response<FileUpload> response) {
-                    if (response.code() == 200) {
-                        Toast.makeText(TrainingActivity.this, "Upload file successful", Toast.LENGTH_SHORT).show();
-                        Log.d("APRKAWP", new GsonBuilder().setPrettyPrinting().create().toJson(response.body()));
-                    } else {
-                        Log.d("APRKAWP", response.errorBody().toString());
+                String encodedFile = Base64.encodeToString(file, Base64.DEFAULT);
+
+                service.uploadFile(encodedFile, getFileName(data.getData())).enqueue(new Callback<FileUpload>() {
+                    @Override
+                    public void onResponse(Call<FileUpload> call, retrofit2.Response<FileUpload> response) {
+                        if (response.code() == 200) {
+                            Toast.makeText(TrainingActivity.this, "Upload file successful", Toast.LENGTH_SHORT).show();
+                            Log.d("APRKAWP", new GsonBuilder().setPrettyPrinting().create().toJson(response.body()));
+                            createProgressUploadFIle(response.body().getLink_path(), id_pelatihan);
+                        } else {
+                            Log.d("APRKAWP", response.errorBody().toString());
+                        }
+
                     }
 
-                }
-
-                @Override
-                public void onFailure(Call<FileUpload> call, Throwable t) {
-                    t.printStackTrace();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<FileUpload> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+            }
         }
     }
 
@@ -367,5 +378,63 @@ public class TrainingActivity extends AppCompatActivity {
         );
 
         myQueue.add(request);
+    }
+
+    private void createProgressUploadFIle(String link_path, int id_pelatihan) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TrainingActivity.this);
+        int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
+
+        String url = GlobalValue.serverURL+"createProgress";
+        RequestQueue myQueue = Volley.newRequestQueue(TrainingActivity.this);
+
+        JSONObject parameter = new JSONObject();
+        try {
+            parameter.put("id_progress_histories", progressHistoryId);
+            parameter.put("id_pelatihan", id_pelatihan);
+            parameter.put("status", true);
+            parameter.put("path_submission", link_path);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        checkProgress();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        );
+
+        myQueue.add(request);
+    }
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        result = result.substring(result.lastIndexOf(".") + 1);
+        return result;
     }
 }
