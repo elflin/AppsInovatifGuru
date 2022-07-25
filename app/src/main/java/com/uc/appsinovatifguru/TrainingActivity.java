@@ -118,7 +118,7 @@ public class TrainingActivity extends AppCompatActivity {
         Training yelyel = new Training();
         yelyel.setJudul("Yel-Yel");
         yelyel.setType("materi");
-        yelyel.setLink("https://youtu.be/iaicuH7q248");
+        yelyel.setLink("https://youtu.be/fS6EW1v314Q");
 
         listTraining.add(perkenalan);
         listTraining.add(consent);
@@ -324,8 +324,19 @@ public class TrainingActivity extends AppCompatActivity {
                     public void onResponse(Call<FileUpload> call, retrofit2.Response<FileUpload> response) {
                         if (response.code() == 200) {
                             Toast.makeText(TrainingActivity.this, "Upload file successful", Toast.LENGTH_SHORT).show();
-                            Log.d("APRKAWP", new GsonBuilder().setPrettyPrinting().create().toJson(response.body()));
-                            createProgressUploadFIle(response.body().getLink_path(), id_pelatihan);
+                            checkProgress();
+                            boolean progressExists = false;
+                            for (Training training : listTraining) {
+                                if (training.getId() == id_pelatihan && training.getAttempts() != 0) {
+                                    progressExists = true;
+                                    break;
+                                }
+                            }
+                            if (progressExists) {
+                                updateProgressUploadFIle(response.body().getLink_path(), id_pelatihan);
+                            } else {
+                                createProgressUploadFIle(response.body().getLink_path(), id_pelatihan);
+                            }
                         } else {
                             Log.d("APRKAWP", response.errorBody().toString());
                         }
@@ -385,6 +396,41 @@ public class TrainingActivity extends AppCompatActivity {
         int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
 
         String url = GlobalValue.serverURL+"createProgress";
+        RequestQueue myQueue = Volley.newRequestQueue(TrainingActivity.this);
+
+        JSONObject parameter = new JSONObject();
+        try {
+            parameter.put("id_progress_histories", progressHistoryId);
+            parameter.put("id_pelatihan", id_pelatihan);
+            parameter.put("status", true);
+            parameter.put("path_submission", link_path);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        checkProgress();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        );
+
+        myQueue.add(request);
+    }
+
+    private void updateProgressUploadFIle(String link_path, int id_pelatihan) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TrainingActivity.this);
+        int progressHistoryId = sharedPreferences.getInt(GlobalValue.progressHistoryId, -1);
+
+        String url = GlobalValue.serverURL+"updateProgress";
         RequestQueue myQueue = Volley.newRequestQueue(TrainingActivity.this);
 
         JSONObject parameter = new JSONObject();
