@@ -36,6 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="7"
             android:fontFamily="@font/proxima_nova_semibold"
             android:text="Dr. Jimmy Ellya Kurniawan, S.Psi., M.Si., Psikolog"
@@ -43,13 +44,14 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/itemTrainingPerkenalanJudulTextView"
             app:layout_constraintStart_toEndOf="@+id/imageView9"
-            app:layout_constraintTop_toTopOf="@+id/imageView9" />
+            app:layout_constraintTop_toBottomOf="@+id/itemTrainingPerkenalanJudulTextView" />
 
         <TextView
             android:id="@+id/itemTrainingPerkenalanProfilTextView7"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="7"
             android:fontFamily="@font/proxima_nova_semibold"
             android:text="Perilaku Inovatif Guru"
@@ -57,13 +59,14 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/itemTrainingPerkenalanJudulTextView"
             app:layout_constraintStart_toEndOf="@+id/imageView12"
-            app:layout_constraintTop_toTopOf="@+id/imageView12" />
+            app:layout_constraintTop_toBottomOf="@+id/itemTrainingPerkenalanProfilTextView2" />
 
         <TextView
             android:id="@+id/itemTrainingPerkenalanProfilTextView9"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="7"
             android:fontFamily="@font/proxima_nova_semibold"
             android:text="Evan Tanuwijaya, S.Kom., M.Kom."
@@ -71,7 +74,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/itemTrainingPerkenalanJudulTextView"
             app:layout_constraintStart_toEndOf="@+id/imageView9"
-            app:layout_constraintTop_toTopOf="@+id/imageView13" />
+            app:layout_constraintTop_toBottomOf="@+id/itemTrainingPerkenalanProfilTextView8" />
 
         <TextView
             android:id="@+id/itemTrainingPerkenalanProfilTextView2"
@@ -82,7 +85,7 @@
             android:fontFamily="@font/proxima_nova_regular"
             android:text="@string/DeskripsiPakJimmy"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="@+id/itemTrainingPerkenalanProfilTextView"
             app:layout_constraintStart_toEndOf="@+id/imageView9"
             app:layout_constraintStart_toStartOf="@+id/itemTrainingPerkenalanProfilTextView"
@@ -97,7 +100,7 @@
             android:fontFamily="@font/proxima_nova_regular"
             android:text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nostrum asperiores explicabo minus. Eius vel, vero ea velit laudantium odit earum harum itaque qui repudiandae minus ab."
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="@+id/itemTrainingPerkenalanProfilTextView"
             app:layout_constraintStart_toEndOf="@+id/imageView9"
             app:layout_constraintStart_toStartOf="@+id/itemTrainingPerkenalanProfilTextView7"
@@ -112,7 +115,7 @@
             android:fontFamily="@font/proxima_nova_regular"
             android:text="@string/DeskripsiEvan"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="@+id/itemTrainingPerkenalanProfilTextView"
             app:layout_constraintStart_toStartOf="@+id/itemTrainingPerkenalanProfilTextView9"
             app:layout_constraintTop_toBottomOf="@+id/itemTrainingPerkenalanProfilTextView9" />
@@ -121,27 +124,27 @@
             android:id="@+id/imageView9"
             android:layout_width="130dp"
             android:layout_height="130dp"
-            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/itemTrainingPerkenalanProfilTextView2"
             app:layout_constraintStart_toStartOf="@+id/itemTrainingPerkenalanJudulTextView"
-            app:layout_constraintTop_toBottomOf="@+id/itemTrainingPerkenalanJudulTextView"
+            app:layout_constraintTop_toTopOf="@+id/itemTrainingPerkenalanProfilTextView"
             app:srcCompat="@drawable/photo_jimmy" />
 
         <ImageView
             android:id="@+id/imageView12"
             android:layout_width="130dp"
             android:layout_height="130dp"
-            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/itemTrainingPerkenalanProfilTextView8"
             app:layout_constraintStart_toStartOf="@+id/imageView9"
-            app:layout_constraintTop_toBottomOf="@+id/itemTrainingPerkenalanProfilTextView2"
+            app:layout_constraintTop_toTopOf="@+id/itemTrainingPerkenalanProfilTextView7"
             app:srcCompat="@drawable/contohpp" />
 
         <ImageView
             android:id="@+id/imageView13"
             android:layout_width="130dp"
             android:layout_height="130dp"
-            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/itemTrainingPerkenalanProfilTextView10"
             app:layout_constraintStart_toStartOf="@+id/imageView9"
-            app:layout_constraintTop_toBottomOf="@+id/itemTrainingPerkenalanProfilTextView8"
+            app:layout_constraintTop_toTopOf="@+id/itemTrainingPerkenalanProfilTextView9"
             app:srcCompat="@drawable/photo_evan" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

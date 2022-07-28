@@ -114,6 +114,7 @@ public class TrainingActivity extends AppCompatActivity {
         Training consent = new Training();
         consent.setJudul("Informed Consent");
         consent.setType("consent");
+        consent.setLink("https://zfrmz.com/g29AUq970kdTjiQHBdzu");
 
         Training yelyel = new Training();
         yelyel.setJudul("Yel-Yel");
