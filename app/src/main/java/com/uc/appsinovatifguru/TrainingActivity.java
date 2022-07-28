@@ -12,7 +12,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.FileUtils;
+import org.apache.commons.io.FileUtils;
 import android.preference.PreferenceManager;
 import android.provider.OpenableColumns;
 import android.util.Base64;
@@ -307,24 +307,26 @@ public class TrainingActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                byte[] file = null;
+                String fileName = getFileName(data.getData());
                 try {
-                    file = IOUtils.toByteArray(inputStream);
+                    FileUtils.copyToFile(inputStream, new File(getCacheDir() + "/" + fileName));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if (file.length > 4096000) {
+                File file = new File(getCacheDir() + "/" + fileName);
+                if (file.length() > 4096000) {
                     Toast.makeText(this, "Ukuran file terlalu besar (Max: 4 MB)", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                String encodedFile = Base64.encodeToString(file, Base64.DEFAULT);
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"),  file);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
-                service.uploadFile(encodedFile, getFileName(data.getData())).enqueue(new Callback<FileUpload>() {
+                service.uploadFile(body).enqueue(new Callback<FileUpload>() {
                     @Override
                     public void onResponse(Call<FileUpload> call, retrofit2.Response<FileUpload> response) {
                         if (response.code() == 200) {
-                            Toast.makeText(TrainingActivity.this, "Upload file successful", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TrainingActivity.this, "Berhasil mengupload file", Toast.LENGTH_SHORT).show();
                             checkProgress();
                             boolean progressExists = false;
                             for (Training training : listTraining) {
@@ -341,12 +343,12 @@ public class TrainingActivity extends AppCompatActivity {
                         } else {
                             Log.d("APRKAWP", response.errorBody().toString());
                         }
-
                     }
 
                     @Override
                     public void onFailure(Call<FileUpload> call, Throwable t) {
                         t.printStackTrace();
+                        Log.d("ranaa", "a");
                     }
                 });
             }
@@ -481,7 +483,6 @@ public class TrainingActivity extends AppCompatActivity {
                 result = result.substring(cut + 1);
             }
         }
-        result = result.substring(result.lastIndexOf(".") + 1);
         return result;
     }
 }
