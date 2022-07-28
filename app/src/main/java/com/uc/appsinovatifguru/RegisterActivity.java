@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -70,9 +71,11 @@ public class RegisterActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    Log.d("RawPassword", rawPass);
+                    Log.d("IsiPassword", password);
 
                     String finalPassword = password;
-                    mAuth.createUserWithEmailAndPassword(email, finalPassword)
+                    mAuth.createUserWithEmailAndPassword(email, rawPass)
                             .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {

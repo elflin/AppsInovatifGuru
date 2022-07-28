@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email = login_email.getEditText().getText().toString().toLowerCase().trim();
-                String rawPass = login_password.getEditText().getText().toString().toLowerCase().trim();
+                String rawPass = login_password.getEditText().getText().toString().trim();
                 if(validate(email, rawPass)) {
                     String password = "";
                     try {
@@ -67,7 +67,10 @@ public class LoginActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    mAuth.signInWithEmailAndPassword(email, password)
+                    Log.d("IsiEmail", email);
+                    Log.d("RawPassword", rawPass);
+                    Log.d("IsiPassword", password);
+                    mAuth.signInWithEmailAndPassword(email, rawPass)
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
