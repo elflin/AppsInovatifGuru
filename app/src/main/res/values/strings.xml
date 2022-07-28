@@ -6,4 +6,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home_text">Yuk, Lengkapi Variabel Perilaku Inovatif Guru!</string>
+    <string name="DeskripsiPakJimmy">Ketua Peneliti Hibah &quot;Model Perilaku Inovatif Guru&quot; dan Dosen Fakultas Psikologi Universitas Ciputra Surabaya. Pengalamannya menjadi dosen sejak 1999 sampai dengan sekarang dengan jabatan fungsional akademik Lektor Kepala. Bidang utama pengajaran dan penelitiannya adalah Psikologi Kerja dan Entrepreneurship. Email: jimmy.ellya@ciputra.ac.id</string>
+    <string name="DeskripsiEvan">Anggota Peneliti Hibah &quot;Model Perilaku Inovatif Guru&quot; dan Dosen Fakultas Teknologi Informasi Universitas Ciputra Surabaya. Saya menjadi dosen sejak tahun 2020 dan sebelum nya telah membantu dosen di Informatika UC sejak tahun 2015. Bidan pengajaran dan penelitian saya adalah pembuatan aplikasi Android dan pemrosesan citra digital menggunakan Deep Learning Email: evan.tanuwijaya@ciputra.ac.id</string>
 </resources>
