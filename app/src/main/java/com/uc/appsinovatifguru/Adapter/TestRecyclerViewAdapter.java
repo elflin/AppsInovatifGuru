@@ -58,6 +58,11 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
         holder.radio_button_3.setText(shuffleJawaban.get(2));
         holder.radio_button_4.setText(shuffleJawaban.get(3));
         holder.radio_button_5.setText(shuffleJawaban.get(4));
+        listTest.get(position).setJawabanA(shuffleJawaban.get(0));
+        listTest.get(position).setJawabanB(shuffleJawaban.get(1));
+        listTest.get(position).setJawabanC(shuffleJawaban.get(2));
+        listTest.get(position).setJawabanD(shuffleJawaban.get(3));
+        listTest.get(position).setJawabanE(shuffleJawaban.get(4));
     }
 
     @Override
@@ -95,23 +100,23 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
                     switch(checkedId){
                         case R.id.radio_button_1:
                             // do operations specific to this selection
-                            testListener.OnRadioClicked(getAdapterPosition(), shuffleJawaban.get(0));
+                            testListener.OnRadioClicked(getAdapterPosition(), listTest.get(getAdapterPosition()).getJawabanA());
                             break;
                         case R.id.radio_button_2:
                             // do operations specific to this selection
-                            testListener.OnRadioClicked(getAdapterPosition(), shuffleJawaban.get(1));
+                            testListener.OnRadioClicked(getAdapterPosition(), listTest.get(getAdapterPosition()).getJawabanB());
                             break;
                         case R.id.radio_button_3:
                             // do operations specific to this selection
-                            testListener.OnRadioClicked(getAdapterPosition(), shuffleJawaban.get(2));
+                            testListener.OnRadioClicked(getAdapterPosition(), listTest.get(getAdapterPosition()).getJawabanC());
                             break;
                         case R.id.radio_button_4:
                             // do operations specific to this selection
-                            testListener.OnRadioClicked(getAdapterPosition(), shuffleJawaban.get(3));
+                            testListener.OnRadioClicked(getAdapterPosition(), listTest.get(getAdapterPosition()).getJawabanD());
                             break;
                         case R.id.radio_button_5:
                             // do operations specific to this selection
-                            testListener.OnRadioClicked(getAdapterPosition(), shuffleJawaban.get(4));
+                            testListener.OnRadioClicked(getAdapterPosition(), listTest.get(getAdapterPosition()).getJawabanE());
                             break;
                     }
                 }
