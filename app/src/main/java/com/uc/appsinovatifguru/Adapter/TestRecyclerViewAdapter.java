@@ -23,6 +23,7 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
     private ArrayList<Test> listTest;
     private TestListener testListener;
     ArrayList<String> shuffleJawaban;
+    private boolean alreadyShuffle = false;
 
     public TestRecyclerViewAdapter(ArrayList<Test> listTest, TestListener testListener){
         this.listTest = listTest;
@@ -34,6 +35,7 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
     public EvalRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.itemrv_soal, parent, false);
+        alreadyShuffle = false;
         return new TestRecyclerViewAdapter.EvalRecyclerViewHolder(view);
     }
 
@@ -46,13 +48,18 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
         }else{
             holder.itemsoal_selesai.setVisibility(View.GONE);
         }
+
         shuffleJawaban = new ArrayList<>();
         shuffleJawaban.add(listTest.get(position).getJawabanA());
         shuffleJawaban.add(listTest.get(position).getJawabanB());
         shuffleJawaban.add(listTest.get(position).getJawabanC());
         shuffleJawaban.add(listTest.get(position).getJawabanD());
         shuffleJawaban.add(listTest.get(position).getJawabanE());
-        Collections.shuffle(shuffleJawaban);
+
+        if (!alreadyShuffle) {
+            Collections.shuffle(shuffleJawaban);
+            alreadyShuffle = true;
+        }
         holder.radio_button_1.setText(shuffleJawaban.get(0));
         holder.radio_button_2.setText(shuffleJawaban.get(1));
         holder.radio_button_3.setText(shuffleJawaban.get(2));
