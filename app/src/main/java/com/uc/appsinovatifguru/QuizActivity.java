@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -125,6 +126,7 @@ public class QuizActivity extends AppCompatActivity implements SoalListener {
     public void OnSelesai() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int historyId = sharedPreferences.getInt(GlobalValue.historyId, -1);
+        Log.d("historyID", String.valueOf(historyId));
         String url = GlobalValue.serverURL+"insertJawabanByHistory";
         RequestQueue myQueue = Volley.newRequestQueue(this);
 
