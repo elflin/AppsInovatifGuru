@@ -43,11 +43,14 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
 
         if (viewType == R.layout.itemrv_trainingperkenalan) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemrv_trainingperkenalan, parent, false);
-        } else if (viewType == R.layout.itemrv_trainingconsent) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemrv_trainingconsent, parent, false);
-        } else if (viewType == R.layout.itemrv_trainingpertemuan) {
+        }
+//        else if (viewType == R.layout.itemrv_trainingconsent) {
+//            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemrv_trainingconsent, parent, false);
+//        }
+        else if (viewType == R.layout.itemrv_trainingpertemuan) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemrv_trainingpertemuan, parent, false);
-        } else {
+        }
+        else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemrv_trainingtest, parent, false);
         }
 
@@ -59,13 +62,13 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
         if (holder.getItemViewType() == R.layout.itemrv_trainingperkenalan) {
             holder.itemTrainingPerkenalanJudulTextView.setText(listTraining.get(position).getJudul());
         } else if (holder.getItemViewType() == R.layout.itemrv_trainingconsent) {
-            holder.itemTrainingConsentFormLink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(listTraining.get(holder.getAdapterPosition()).getLink()));
-                    view.getContext().startActivity(intent);
-                }
-            });
+//            holder.itemTrainingConsentFormLink.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(listTraining.get(holder.getAdapterPosition()).getLink()));
+//                    view.getContext().startActivity(intent);
+//                }
+//            });
         } else if (holder.getItemViewType() == R.layout.itemrv_trainingpertemuan) {
             holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.GONE);
             holder.itemTrainingPertemuanJudulTextView.setText(listTraining.get(position).getJudul());

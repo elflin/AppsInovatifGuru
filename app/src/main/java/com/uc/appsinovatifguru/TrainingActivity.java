@@ -119,7 +119,7 @@ public class TrainingActivity extends AppCompatActivity {
         Training yelyel = new Training();
         yelyel.setJudul("Yel-Yel");
         yelyel.setType("materi");
-        yelyel.setLink("https://youtu.be/fS6EW1v314Q");
+        yelyel.setLink("https://youtu.be/Rjya0Sp3d9U");
 
         listTraining.add(perkenalan);
         listTraining.add(consent);
@@ -137,14 +137,17 @@ public class TrainingActivity extends AppCompatActivity {
 
                             for (int i = 0; i < temp1.length(); i++) {
                                 JSONObject temp2 = temp1.getJSONObject(i);
-                                Training temp3 = new Training();
-                                temp3.setId(temp2.getInt("id"));
-                                temp3.setJudul(temp2.getString("judul"));
-                                temp3.setDeskripsi(temp2.getString("deskripsi"));
-                                temp3.setLink(temp2.getString("link"));
-                                temp3.setType(temp2.getString("type"));
-                                temp3.setLink_ppt(temp2.getString("link_ppt"));
-                                listTraining.add(temp3);
+                                if(!temp2.getString("type").equalsIgnoreCase("tes") &&
+                                        !temp2.getString("judul").equalsIgnoreCase("Pertemuan 3: Memperkuat Intensi Berinovasi")) {
+                                    Training temp3 = new Training();
+                                    temp3.setId(temp2.getInt("id"));
+                                    temp3.setJudul(temp2.getString("judul"));
+                                    temp3.setDeskripsi(temp2.getString("deskripsi"));
+                                    temp3.setLink(temp2.getString("link"));
+                                    temp3.setType(temp2.getString("type"));
+                                    temp3.setLink_ppt(temp2.getString("link_ppt"));
+                                    listTraining.add(temp3);
+                                }
                             }
                             trainingAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
