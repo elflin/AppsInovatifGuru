@@ -112,9 +112,11 @@ public class TrainingActivity extends AppCompatActivity {
         perkenalan.setType("perkenalan");
 
         Training consent = new Training();
-        consent.setJudul("Informed Consent");
-        consent.setType("consent");
-        consent.setLink("https://zfrmz.com/g29AUq970kdTjiQHBdzu");
+//        consent.setJudul("Informed Consent");
+//        consent.setType("consent");
+//        consent.setLink("https://zfrmz.com/g29AUq970kdTjiQHBdzu");
+        consent.setJudul("Training Perilaku Inovatif Guru");
+        consent.setType("materi");
 
         Training yelyel = new Training();
         yelyel.setJudul("Yel-Yel");
@@ -122,7 +124,7 @@ public class TrainingActivity extends AppCompatActivity {
         yelyel.setLink("https://youtu.be/Rjya0Sp3d9U");
 
         listTraining.add(perkenalan);
-        listTraining.add(consent);
+//        listTraining.add(consent);
         listTraining.add(yelyel);
 
         String url = GlobalValue.serverURL+"pelatihans";

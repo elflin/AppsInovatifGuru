@@ -70,32 +70,45 @@ public class TrainingRecyclerViewAdapter extends RecyclerView.Adapter<TrainingRe
 //                }
 //            });
         } else if (holder.getItemViewType() == R.layout.itemrv_trainingpertemuan) {
-            holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.GONE);
+//            holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.GONE);
             holder.itemTrainingPertemuanJudulTextView.setText(listTraining.get(position).getJudul());
-            holder.itemTrainingPertemuanDeskripsiTextView.setText(listTraining.get(position).getDeskripsi());
-            holder.itemTrainingPertemuanDownloadPdf.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String url = "https://guru-inovatif.com/modul/" + listTraining.get(holder.getAdapterPosition()).getLink_ppt();
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    view.getContext().startActivity(intent);
-                }
-            });
+            if(!listTraining.get(position).getJudul().equalsIgnoreCase("Latihan Individu (Homework)")) {
+                holder.itemTrainingPertemuanDeskripsiTextView.setText(listTraining.get(position).getDeskripsi());
+            }else{
+                holder.itemTrainingPertemuanDeskripsiTextView.setVisibility(View.GONE);
+            }
+            if(!listTraining.get(position).getJudul().equalsIgnoreCase("Latihan Individu (Homework)")) {
+                holder.itemTrainingPertemuanDownloadPdf.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String url = "https://guru-inovatif.com/modul/" + listTraining.get(holder.getAdapterPosition()).getLink_ppt();
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        view.getContext().startActivity(intent);
+                    }
+                });
+            }else{
+                holder.itemTrainingPertemuanDownloadPdf.setVisibility(View.GONE);
+            }
 
             if (listTraining.get(position).getAttempts() != 0) {
                 holder.itemTrainingPertemuanDoneCardView.setVisibility(View.VISIBLE);
             } else {
                 holder.itemTrainingPertemuanDoneCardView.setVisibility(View.GONE);
             }
-            if (!listTraining.get(position).getJudul().equals("Pertemuan 1: Pengantar")) {
+            if (!listTraining.get(position).getJudul().equalsIgnoreCase("Pertemuan 1: Pengantar")) {
                 holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.VISIBLE);
             }
-            if (listTraining.get(position).getJudul().equals("Yel-Yel")) {
+            if (listTraining.get(position).getJudul().equalsIgnoreCase("Yel-Yel")) {
                 holder.itemTrainingPertemuanDeskripsiTextView.setVisibility(View.GONE);
                 holder.itemTrainingPertemuanDownloadPdf.setVisibility(View.GONE);
                 holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.GONE);
+            }else if(listTraining.get(position).getJudul().equalsIgnoreCase("Latihan Individu (Homework)")){
+                holder.itemTrainingPertemuanDeskripsiTextView.setVisibility(View.GONE);
+                holder.itemTrainingPertemuanDownloadPdf.setVisibility(View.GONE);
+                holder.itemTrainingPertemuanWebView.setVisibility(View.GONE);
+                holder.itemTrainingPertemuanUploadPdfButton.setVisibility(View.VISIBLE);
             }
-
+    
             holder.itemTrainingPertemuanWebView.getSettings().setJavaScriptEnabled(true);
             holder.itemTrainingPertemuanWebView.setWebChromeClient(new WebChromeClient());
             String link = listTraining.get(position).getLink();
